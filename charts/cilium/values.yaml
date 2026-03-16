@@ -1,0 +1,29 @@
+ipv4:
+  enabled: false
+
+ipv6:
+  enabled: true
+
+ipam:
+  mode: kubernetes
+  operator:
+    clusterPoolIPv6PodCIDRList:
+      - 2a01:e0a:86b:72d1::/64
+    clusterPoolIPv6MaskSize: 64
+
+tunnel: disabled
+nativeRoutingCIDR: 2a01:e0a:86b:72d1::/64
+autoDirectNodeRoutes: true
+kubeProxyReplacement: true
+k8sServiceHost: 2a01:e0a:86b:72d0::1
+k8sServicePort: 443
+
+operator:
+  replicas: 1
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true

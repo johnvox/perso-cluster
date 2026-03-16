@@ -1,0 +1,4 @@
+charts:
+- repoURL: oci://quay.io/cilium/charts/cilium
+  targetRevision: 1.19.1
+  path: .
