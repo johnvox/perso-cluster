@@ -5,7 +5,7 @@ namespace: argocd
 
 resources:
 - namespace.yaml
-- https://github.com/argoproj/argo-cd.git//manifests/cluster-install?ref=v3.1.1
+- https://github.com/argoproj/argo-cd.git//manifests/cluster-install?ref=v3.3.3
 - projects.yaml
 - self.yaml
 - system.applicationset.yaml
