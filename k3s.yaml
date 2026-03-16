@@ -1,0 +1,10 @@
+write-kubeconfig-mode: "0644"
+cluster-init: true
+cluster-cidr: 172.20.0.0/16
+service-cidr: 172.21.0.0/16
+cluster-dns: 172.21.0.255
+disable:
+  - traefik
+  - servicelb
+  - local-storage
+disable-helm-controller: true

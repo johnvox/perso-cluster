@@ -1,0 +1,24 @@
+tunnelSecrets:
+  existingConfigJsonFileSecret:
+    name: cloudflare-tunnel
+  existingPemFileSecret:
+    name: cloudflare-tunnel
+
+tunnelConfig:
+  logLevel: warn
+  transportLogLevel: warn
+  name: pegasus
+
+replica:
+  allNodes: false
+  count: 1
+
+securityContext:
+  capabilities: null
+
+ingress:
+  - hostname: "*.jynolen.fr"
+    service: https://envoy-proxy.envoy-gateway-system.svc.cluster.local:443
+    originRequest:
+      originServerName: internal.gw.jynolen.fr
+  - service: http_status:404

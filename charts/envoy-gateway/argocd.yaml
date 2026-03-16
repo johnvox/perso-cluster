@@ -1,0 +1,11 @@
+application:
+  namespace: envoy-gateway-system
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
+charts:
+- repoURL: oci://docker.io/envoyproxy/gateway-helm
+  targetRevision: v1.5.0
+  path: .

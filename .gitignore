@@ -1,0 +1,4 @@
+**/sealed.local.yaml
+.secure
+talos.yaml
+cloud.yaml

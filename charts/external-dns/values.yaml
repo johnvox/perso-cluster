@@ -1,0 +1,18 @@
+sources: ["gateway-httproute", "gateway-tcproute", "gateway-tlsroute", "gateway-udproute"]
+provider: cloudflare
+
+env:
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-dns
+        key: apiKey
+  - name: CF_API_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-dns
+        key: email
+  - name: EXTERNAL_DNS_ZONE_ID_FILTER
+    value: "c2207e50a82b876f194208f5170a3c34"
+  - name: EXTERNAL_DNS_CLOUDFLARE_PROXIED
+    value: "true"
