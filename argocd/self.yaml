@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/jynolen/peros-cluster
+    repoURL: https://github.com/jynolen/perso-cluster
     path: argocd
     targetRevision: HEAD
   destination:

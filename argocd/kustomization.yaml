@@ -1,17 +1,25 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: argocd
+# namespace: argocd
 
 resources:
-- namespace.yaml
 - https://github.com/argoproj/argo-cd.git//manifests/cluster-install?ref=v3.3.3
 - projects.yaml
 - self.yaml
 - system.applicationset.yaml
 - application.applicationset.yaml
 
+transformers:
+- namespace.yaml
+
 configMapGenerator:
+  - name: coredns-custom
+    namespace: kube-system
+    files:
+    - files/coredns.ipv6.override
+    options:
+      disableNameSuffixHash: true
   - name: argocd-cmd-params-cm
     behavior: merge
     literals:
@@ -24,7 +32,7 @@ configMapGenerator:
     literals:
       - url=https://argocd.jynolen.fr
     # files:
-    #   - oidc.config
+    #   - files/oidc.config
     options:
       disableNameSuffixHash: true
   - name: argocd-rbac-cm
@@ -32,7 +40,7 @@ configMapGenerator:
     literals:
       - scopes="[roles]"
     files:
-      - policy.csv
+      - files/policy.csv
     options:
       disableNameSuffixHash: true
 
