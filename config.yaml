@@ -1,0 +1,14 @@
+write-kubeconfig-mode: "0644"
+cluster-init: true
+cluster-cidr: 2a01:e0a:86b:72d1::/96,172.20.0.0/16
+service-cidr: 2a01:e0a:86b:72d1:0:1::/96,172.21.0.0/16
+cluster-dns: 2a01:e0a:86b:72d1:0:1::ffff,172.21.0.255
+disable:
+  - traefik
+  - servicelb
+  - local-storage
+disable-helm-controller: true
+flannel-backend: none
+disable-network-policy: true
+kubelet-arg: "node-ip=::"
+# MetalLB Address Pool 2a01:e0a:86b:72d1:0:2::/112

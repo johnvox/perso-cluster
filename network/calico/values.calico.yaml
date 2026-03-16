@@ -1,0 +1,17 @@
+manageCRDs: false
+
+installation:
+  calicoNetwork:
+    ipPools:
+      - name: default-ipv4-ippool
+        blockSize: 26
+        cidr: 172.20.0.0/20
+        encapsulation: VXLANCrossSubnet
+        natOutgoing: Enabled
+        nodeSelector: all()
+      - name: default-ipv6-ippool
+        blockSize: 120
+        cidr: 2a01:e0a:86b:72d1::/96
+        encapsulation: VXLANCrossSubnet
+        natOutgoing: Disabled
+        nodeSelector: all()
