@@ -6,9 +6,9 @@ spec:
   client: gw-tunnel
   tcp:
     host: echoserver.default.svc.cluster.local
-    port: 80
+    port: 8167
     server:
-      port: 8167
+      port: 80
     proxyProtocol: v2
     healthCheck:
       timeoutSeconds: 5
