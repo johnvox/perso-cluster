@@ -1,0 +1,13 @@
+apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
+kind: Client
+metadata:
+  name: gw-tunnel
+spec:
+  server:
+    host: srv630959.hstgr.cloud
+    port: 7000
+    authentication:
+      token:
+        secret:
+          name: client-01-secret
+          key: token

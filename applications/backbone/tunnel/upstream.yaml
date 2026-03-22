@@ -1,0 +1,23 @@
+apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
+kind: Upstream
+metadata:
+  name: echoserver
+spec:
+  client: gw-tunnel
+  tcp:
+    host: echoserver.default.svc.cluster.local
+    port: 80
+    server:
+      port: 8167
+    proxyProtocol: v2
+    healthCheck:
+      timeoutSeconds: 5
+      maxFaileds: 3
+      intervalSeconds: 10
+    transport:
+      useEncryption: true
+      useCompression: true
+      bandwidthLimit:
+        enabled: true
+        limit: 1024
+        type: MB

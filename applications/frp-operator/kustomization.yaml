@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  annotations: 
+    argocd.argoproj.io/revision: main
+    argocd.argoproj.io/namespace: frp-operator
+
+resources:
+- https://github.com/zufardhiyaulhaq/frp-operator.git//config/crd?ref=v0.6.0
+- rbac.yaml
+- workload.yaml
+- service.yaml
+namespace: frp-operator
+
+configMapGenerator:
+- files:
+  - controller_manager_config.yaml=config.yaml
+  name: controller-manager-config
+  options:
+    disableNameSuffixHash: true
+  
+
+images:
+- name: kube-rbac-proxy
+  newName: quay.io/brancz/kube-rbac-proxy
+  newTag: v0.21.1
+- name: frp-operator
+  newName: ghcr.io/zufardhiyaulhaq/frp-operator
+  newTag: v0.6.0

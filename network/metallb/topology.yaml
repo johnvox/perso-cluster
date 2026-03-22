@@ -1,0 +1,16 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ipv6-pool
+spec:
+  addresses:
+  - 2a01:e0a:86b:72d0::30:0/108
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: expose
+spec:
+  ipAddressPools:
+  - ipv6-pool
+---
