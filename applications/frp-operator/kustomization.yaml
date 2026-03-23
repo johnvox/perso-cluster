@@ -26,4 +26,4 @@ images:
   newTag: v0.21.1
 - name: frp-operator
   newName: ghcr.io/zufardhiyaulhaq/frp-operator
-  newDigest: sha256:188254abdeafaa3fe0c51e07c431d883baab6199c29647d65719b82c4ab069ad
+  digest: sha256:188254abdeafaa3fe0c51e07c431d883baab6199c29647d65719b82c4ab069ad
