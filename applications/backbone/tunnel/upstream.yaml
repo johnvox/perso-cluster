@@ -1,7 +1,33 @@
+# apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
+# kind: Upstream
+# metadata:
+#   name: echoserver-http
+# spec:
+#   client: gw-tunnel
+#   http:
+#     host: echoserver.default.svc.cluster.local
+#     port: 80
+#     customDomains:
+#       - 5b6c7180.nip.io
+#       - "*.5b6c7180.nip.io"
+# ---
+# apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
+# kind: Upstream
+# metadata:
+#   name: echoserver-https
+# spec:
+#   client: gw-tunnel
+#   https:
+#     host: echoserver.default.svc.cluster.local
+#     port: 80
+#     customDomains:
+#       - 5b6c7180.nip.io
+#       - "*.5b6c7180.nip.io"
+# ---
 apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
 kind: Upstream
 metadata:
-  name: echoserver-http
+  name: echoserver
 spec:
   client: gw-tunnel
   http:
@@ -10,33 +36,9 @@ spec:
     customDomains:
       - 5b6c7180.nip.io
       - "*.5b6c7180.nip.io"
----
-apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
-kind: Upstream
-metadata:
-  name: echoserver-https
-spec:
-  client: gw-tunnel
   https:
     host: echoserver.default.svc.cluster.local
     port: 80
     customDomains:
       - 5b6c7180.nip.io
       - "*.5b6c7180.nip.io"
-  # tcp:
-  #   host: echoserver.default.svc.cluster.local
-  #   port: 80
-  #   server:
-  #     port: 80
-  #   proxyProtocol: v2
-  #   healthCheck:
-  #     timeoutSeconds: 5
-  #     maxFailed: 3
-  #     intervalSeconds: 10
-  #   transport:
-  #     useEncryption: true
-  #     useCompression: true
-  #     bandwidthLimit:
-  #       enabled: true
-  #       limit: 1024
-  #       type: MB
