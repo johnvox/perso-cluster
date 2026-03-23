@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/namespace: frp-operator
 
 resources:
-- https://github.com/zufardhiyaulhaq/frp-operator.git//config/crd?ref=v0.6.0
+- https://github.com/zufardhiyaulhaq/frp-operator.git//config/crd?ref=3faac8c
 - rbac.yaml
 - workload.yaml
 - service.yaml
