@@ -12,8 +12,6 @@ items:
       port: 80
       customDomains: &customDomains
         - srv630959.hstgr.cloud
-        - 5b6c7180.nip.io
-        - "*.5b6c7180.nip.io"
         - "*.jynolen.fr"
 - apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
   kind: Upstream
