@@ -1,7 +1,7 @@
 apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
 kind: Upstream
 metadata:
-  name: echoserver
+  name: echoserver-http
 spec:
   client: gw-tunnel
   http:
@@ -10,6 +10,12 @@ spec:
     customDomains:
       - 5b6c7180.nip.io
       - "*.5b6c7180.nip.io"
+---
+apiVersion: frp.zufardhiyaulhaq.com/v1alpha1
+kind: Upstream
+metadata:
+  name: echoserver-https
+spec:
   https:
     host: echoserver.default.svc.cluster.local
     port: 80
