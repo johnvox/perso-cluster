@@ -4,20 +4,32 @@ metadata:
   name: echoserver
 spec:
   client: gw-tunnel
-  tcp:
+  http:
     host: echoserver.default.svc.cluster.local
     port: 80
-    server:
-      port: 80
-    proxyProtocol: v2
-    healthCheck:
-      timeoutSeconds: 5
-      maxFailed: 3
-      intervalSeconds: 10
-    transport:
-      useEncryption: true
-      useCompression: true
-      bandwidthLimit:
-        enabled: true
-        limit: 1024
-        type: MB
+    customDomains:
+      - 5b6c7180.nip.io
+      - "*.5b6c7180.nip.io"
+  https:
+    host: echoserver.default.svc.cluster.local
+    port: 80
+    customDomains:
+      - 5b6c7180.nip.io
+      - "*.5b6c7180.nip.io"
+  # tcp:
+  #   host: echoserver.default.svc.cluster.local
+  #   port: 80
+  #   server:
+  #     port: 80
+  #   proxyProtocol: v2
+  #   healthCheck:
+  #     timeoutSeconds: 5
+  #     maxFailed: 3
+  #     intervalSeconds: 10
+  #   transport:
+  #     useEncryption: true
+  #     useCompression: true
+  #     bandwidthLimit:
+  #       enabled: true
+  #       limit: 1024
+  #       type: MB

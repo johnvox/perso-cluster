@@ -6,6 +6,7 @@ spec:
   server:
     host: srv630959.hstgr.cloud
     port: 7000
+    protocol: quic
     authentication:
       token:
         secret:
