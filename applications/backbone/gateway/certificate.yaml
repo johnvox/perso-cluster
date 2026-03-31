@@ -1,0 +1,17 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-jynolen-tls
+spec:
+  dnsNames:
+  - "*.jynolen.fr"
+  - internal.gw.jynolen.fr
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: acme-issuer
+  secretName: wildcard-jynolen-tls
+  usages:
+  - digital signature
+  - key encipherment

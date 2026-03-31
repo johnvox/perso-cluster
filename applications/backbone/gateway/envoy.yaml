@@ -1,0 +1,41 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-proxy
+spec:
+  logging:
+    level:
+      default: warn
+  provider:
+    kubernetes:
+      envoyService:
+        name: envoy-proxy
+        externalTrafficPolicy: Local
+        type: ClusterIP
+    type: Kubernetes
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy-proxy
+  annotations:
+    external-dns.alpha.kubernetes.io/target: gw.jynolen.fr
+    cert-manager.io/cluster-issuer: acme-issuer
+spec:
+  gatewayClassName: envoy-gateway
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: envoy-proxy
+  allowedListeners:
+    namespaces:
+      from: All
+  listeners:
+  - name: http
+    protocol: HTTP
+    hostname: "*.jynolen.fr"
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: All

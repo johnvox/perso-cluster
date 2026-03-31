@@ -1,0 +1,6 @@
+**/sealed.local.yaml
+**/.charts
+.secure
+talos.yaml
+cloud.yaml
+tmp

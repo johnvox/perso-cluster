@@ -1,0 +1,4 @@
+charts:
+- repoURL: docker.io/casbin
+  targetRevision: 2.372.0
+  chart: casdoor-helm-charts
