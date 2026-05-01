@@ -15,7 +15,7 @@ spec:
     clientID: "815d4d9da589b1f0ecc4"
     clientSecret:
       name: envoy-client-secret
-    forwardAccessToken: true
+    forwardAccessToken: false
     redirectURL: "https://envoy.jynolen.fr/oauth2/callback"
     cookieDomain: jynolen.fr
     cookieNames:
