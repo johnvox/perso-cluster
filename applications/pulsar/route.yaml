@@ -12,7 +12,7 @@ spec:
   listeners:
   - name: pulsar-https
     protocol: HTTPS
-    hostname: "dev.pulsar.jynolen.fr"
+    hostname: pulsar.jynolen.fr
     port: 443
     allowedRoutes:
       namespaces:
@@ -34,7 +34,7 @@ spec:
       kind: ListenerSet
       name: pulsar
   hostnames:
-    - "dev.pulsar.jynolen.fr"
+    - pulsar.jynolen.fr
   rules:
     - backendRefs:
         - group: ""
@@ -56,21 +56,3 @@ spec:
         - path:
             type: PathPrefix
             value: /dekaf
-# ---
-# apiVersion: gateway.envoyproxy.io/v1alpha1
-# kind: SecurityPolicy
-# metadata:
-#   name: echoserver
-# spec:
-#   targetRefs:
-#     - group: gateway.networking.k8s.io
-#       kind: HTTPRoute
-#       name: echoserver
-#   oidc:
-#     provider:
-#       issuer: "https://keycloak.jynolen.fr/realms/kubernetes"
-#     clientID: "echoserver"
-#     clientSecret:
-#       name: "echoserver-oidc-secret"
-#     redirectURL: "https://echo.jynolen.fr/oauth2/callback"
-#     logoutPath: "/logout"
