@@ -15,7 +15,12 @@ spec:
     clientID: "815d4d9da589b1f0ecc4"
     clientSecret:
       name: envoy-client-secret
+    forwardAccessToken: true
     redirectURL: "https://envoy.jynolen.fr/oauth2/callback"
+    cookieDomain: jynolen.fr
+    cookieNames:
+      accessToken: EnvoyAccessToken
+      idToken: EnvoyIdToken
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
