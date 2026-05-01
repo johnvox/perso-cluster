@@ -42,5 +42,4 @@ alertmanager:
   service:
     enabled: false
   alertmanagerSpec:
-    externalUrl: /alertmanager  
     routePrefix: /alertmanager
