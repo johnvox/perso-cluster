@@ -33,11 +33,11 @@ spec:
           - name: iss
             valueType: String
             values:
-            - https://casdoor.open.jynolen.fr/
+            - https://casdoor.open.jynolen.fr
   jwt:
     providers:
       - name: cassdoor
-        issuer: https://casdoor.open.jynolen.fr/
+        issuer: https://casdoor.open.jynolen.fr
         remoteJWKS:
           uri: https://casdoor.open.jynolen.fr/.well-known/jwks
         claimToHeaders:
