@@ -10,6 +10,7 @@ spec:
   security:
     authentication:
       modes: ["SCRAM"]
+  users: []
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
 ---
