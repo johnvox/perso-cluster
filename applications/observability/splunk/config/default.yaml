@@ -3,3 +3,7 @@ splunk:
   license_uri: free
   hec:
     ssl: False
+  add:
+  - index k8s-logs -maxTotalDataSizeMB 20480 -frozenTimePeriodInSecs 2592000
+  - index k8s-metrics -maxTotalDataSizeMB 5120 -datatype metric -frozenTimePeriodInSecs 2592000
+  
