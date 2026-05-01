@@ -1,0 +1,58 @@
+exporters:
+  splunk_hec/self:
+    endpoint: ${env:OTEL_SELF_HEC_ENDPOINT:-}
+    token: ${env:OTEL_SELF_HEC_TOKEN:-}
+    disable_compression: true
+    otel_attrs_to_hec_metadata:
+      source: splnk.source
+      sourcetype: splnk.sourcetype
+      host: splnk.host
+      index: splnk.index
+
+processors:
+  transform/setup-splunk-field:
+    log_statements:
+      - context: resource
+        statements:
+        - set(resource.attributes["splnk.host"], Coalesce([resource.attributes["splnk.host"], resource.attributes["k8s.node.name"]]))
+        - set(resource.attributes["splnk.source"], Coalesce([ resource.attributes["splnk.source"], Format("%s:%s:%s", [ resource.attributes["k8s.namespace.name"], resource.attributes["k8s.pod.name"], resource.attributes["k8s.container.name"] ])]))
+        - set(resource.attributes["splnk.sourcetype"], Coalesce([resource.attributes["splnk.sourcetype"],Format("kube:container:%s", [resource.attributes["k8s.container.name"]])]))
+        - set(resource.attributes["splnk.index"], Format("%s-logs", [ Coalesce([ resource.attributes["splnk.index"], "${env:OTEL_SELF_INDEX:-k8s}" ]) ]) )
+    metric_statements:
+      - context: resource
+        statements:
+        - set(resource.attributes["splnk.host"], Coalesce([resource.attributes["splnk.host"], resource.attributes["k8s.node.name"]]))
+        - set(resource.attributes["splnk.source"], Coalesce([ resource.attributes["splnk.source"], Format("%s:%s:%s", [ resource.attributes["k8s.namespace.name"], resource.attributes["k8s.pod.name"], resource.attributes["k8s.container.name"] ])]))
+        - set(resource.attributes["splnk.sourcetype"], Coalesce([resource.attributes["splnk.sourcetype"],Format("kube:container:%s", [resource.attributes["k8s.container.name"]])]))
+        - set(resource.attributes["splnk.index"], Format("%s-metrics", [ Coalesce([ resource.attributes["splnk.index"], "${env:OTEL_SELF_INDEX:-k8s}" ]) ]) )
+    trace_statements:
+      - context: resource
+        statements:
+        - set(resource.attributes["splnk.host"], Coalesce([resource.attributes["splnk.host"], resource.attributes["k8s.node.name"]]))
+        - set(resource.attributes["splnk.source"], Coalesce([ resource.attributes["splnk.source"], Format("%s:%s:%s", [ resource.attributes["k8s.namespace.name"], resource.attributes["k8s.pod.name"], resource.attributes["k8s.container.name"] ])]))
+        - set(resource.attributes["splnk.sourcetype"], Coalesce([resource.attributes["splnk.sourcetype"],Format("kube:container:%s", [resource.attributes["k8s.container.name"]])]))
+        - set(resource.attributes["splnk.index"], Format("%s-traces", [ Coalesce([ resource.attributes["splnk.index"], "${env:OTEL_SELF_INDEX:-k8s}" ]) ]) )
+
+service:
+  pipelines:
+    logs/splunk:
+      receivers:
+      - forward/output
+      processors:
+      - transform/setup-splunk-field
+      exporters:
+      - splunk_hec/self
+    metrics/splunk:
+      receivers:
+      - forward/output
+      processors:
+      - transform/setup-splunk-field
+      exporters:
+      - splunk_hec/self
+    traces/splunk:
+      receivers:
+      - forward/output
+      processors:
+      - transform/setup-splunk-field
+      exporters:
+      - splunk_hec/self

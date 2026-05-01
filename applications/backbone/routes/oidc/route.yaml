@@ -1,0 +1,40 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: oidc
+  namespace: backbone
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-proxy
+  oidc:
+    provider:
+      issuer: "https://casdoor.open.jynolen.fr/"
+    clientID: "815d4d9da589b1f0ecc4"
+    clientSecret:
+      name: envoy-client-secret
+    redirectURL: "https://envoy.jynolen.fr/oauth2/callback"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: envoy-redirect
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: envoy
+  hostnames:
+    - envoy.jynolen.fr
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /oauth2/callback
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: oidc-redirect
+          port: 8080

@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: opentelemetry-collector-agent
+spec:
+  selector:
+  revisionHistoryLimit: 2
+  template:
+    spec:
+      securityContext:
+        fsGroup: 999
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            - --config=/conf/base.yaml
+            - --config=/conf/input.yaml
+            - --config=/conf/internal.yaml
+            - --config=/conf/output.splunk.yaml
+            - --config=/conf/output.jaeger.yaml   
+            - --config=/conf/processor.argocd.yaml
+            - --config=/conf/processor.default.yaml       
+            - --feature-gates=confmap.enableMergeAppendOption
+          envFrom:
+          - configMapRef:
+              name: opentelemetry-config-env
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: OTEL_K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: OTEL_K8S_NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: OTEL_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: OTEL_K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: OTEL_K8S_POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: K8S_NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: OTEL_SELF_HEC_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: hec_token
+                  name: splunk-secret
+          image: collector
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 13133
+          name: opentelemetry-collector
+          ports:
+            - containerPort: 6831
+              name: jaeger-compact
+              protocol: UDP
+            - containerPort: 14250
+              name: jaeger-grpc
+              protocol: TCP
+            - containerPort: 14268
+              name: jaeger-thrift
+              protocol: TCP
+            - containerPort: 4317
+              name: otlp
+              protocol: TCP
+            - containerPort: 4318
+              name: otlp-http
+              protocol: TCP
+            - containerPort: 9411
+              name: zipkin
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 13133
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /conf
+              name: opentelemetry-config
+            - mountPath: /var/log/pods
+              name: varlogpods
+              readOnly: true
+      hostNetwork: false
+      hostPID: false
+      serviceAccountName: opentelemetry-collector
+      volumes:
+        - configMap:
+            name: opentelemetry-config
+          name: opentelemetry-config
+        - hostPath:
+            path: /var/log/pods
+          name: varlogpods
+  updateStrategy:
+    type: RollingUpdate

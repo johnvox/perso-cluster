@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- workload.yaml
+
+images:
+- name: frpc
+  newName: ghcr.io/johnvox/frp/frpc
+  newTag: 255249d
+
+configMapGenerator:
+- name: gw-tunnel-frpc-config
+  options:
+    disableNameSuffixHash: true
+  files:
+  - frpc.toml

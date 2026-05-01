@@ -1,0 +1,16 @@
+.:53 {
+    errors
+    health
+    ready
+    prometheus :9153
+    cache 30
+    loop
+    reload
+    loadbalance
+
+    forward . [2606:4700:4700::1111]:53 [2606:4700:4700::1001]:53
+    forward . /etc/resolv.conf
+    log . "{proto} Request: {name} {type} {/log/class} {/log/type}"
+}
+# podman run --rm -p5353:53/udp -v ./Corefile:/etc/coredns/Corefile rancher/mirrored-coredns-coredns:1.14.1 -conf /etc/coredns/Corefile
+# dig @localhost -p 5353 google.fr

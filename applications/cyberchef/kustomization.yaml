@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: cyberchef
+
+labels:
+- pairs:
+    app.kubernetes.io/name: cyberchef
+  includeSelectors: true
+  includeTemplates: true
+
+resources:
+- service.yaml
+- workload.yaml
+- route.yaml

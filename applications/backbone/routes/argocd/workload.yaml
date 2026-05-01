@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-webhook-validator
+spec:
+  selector: 
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    spec:
+      containers:
+      - name: github-webhook-validator
+        image: github-webhook-validator
+        env:
+        - name: WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: webhook.github.secret
+              name: argocd-secret
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            memory: 50Mi
+            cpu: 100m
+          requests:
+            memory: 25Mi
+            cpu: 50m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: github-webhook-validator
+spec:
+  ports:
+  - name: https
+    port: 8080
+    protocol: TCP
+    targetPort: 8080

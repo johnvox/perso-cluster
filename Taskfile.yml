@@ -1,0 +1,43 @@
+# https://taskfile.dev
+
+version: '3'
+
+dotenv:
+- .env
+
+tasks:
+  reset:
+    cmds:
+      - k3s-killall.sh
+      - k3s-lite-uninstall.sh
+  k3s:
+    deps:
+    - reset
+    cmds: 
+    - cp k3s.config.yaml /etc/rancher/k3s/config.yaml
+    - k3s
+    - systemctl start k3s
+  kubie:
+    cmds:
+      - sed "s/default/k3s/" /etc/rancher/k3s/k3s.yaml > ~/.kube/kubie/k3s.yaml
+      - sed "s/default/k3s-root/" /etc/rancher/k3s/k3s.yaml > ~/.kube/config
+    sources:
+    - /etc/rancher/k3s/k3s.yaml
+  argocd:
+    cmds:
+    - kubectl get ns argocd || kubectl create ns argocd
+    - kubectl apply -k argocd --server-side=true
+  dex:
+    - podman run --rm -p 8000:8000 -v ./dex.conf:/tmp/dex.yaml ghcr.io/dexidp/dex:latest-alpine dex serve /tmp/dex.yaml
+  otlp:
+    - podman run --rm 
+        -v {{.TASKFILE_DIR}}/applications/observability/otlp/config:/conf 
+        --env-file {{.TASKFILE_DIR}}/.env 
+        ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.151.0 
+        --config=/conf/base.yaml 
+        --config=/conf/input.yaml 
+        --config=/conf/internal.yaml 
+        --config=/conf/output.splunk.yaml 
+        --config=/conf/output.jaeger.yaml         
+        --config=/conf/processor.argocd.yaml 
+        --feature-gates=confmap.enableMergeAppendOption print-config

@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  annotations: 
+    argocd.argoproj.io/revision: main
+
+namespace: observability
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: observability
+    includeSelectors: true
+    includeTemplates: true
+
+resources:
+- otlp
+- splunk
+- grafana
+- route.yaml
+
+helmGlobals:
+  chartHome: .charts
+
+helmCharts:
+- name: kube-prometheus-stack
+  version: 84.4.0
+  repo: https://prometheus-community.github.io/helm-charts
+  releaseName: prometheus
+  includeCRDs: true
+  additionalValuesFiles:
+  - values.prometheus.yaml
+- name: grafana-operator
+  version: 5.22.2
+  repo: https://grafana.github.io/helm-charts
+  releaseName: grafana-operator
+  includeCRDs: true
+  additionalValuesFiles:
+  - values.grafana.yaml
+- repo: https://jaegertracing.github.io/helm-charts
+  version: 4.7.0
+  name: jaeger
+  releaseName: jaeger
+  additionalValuesFiles:
+  - values.jaeger.yaml
+
+patches:
+- target:
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1sync-options
+      value: ServerSideApply=true

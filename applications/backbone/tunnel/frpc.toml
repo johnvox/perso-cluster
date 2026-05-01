@@ -1,0 +1,36 @@
+serverAddr = "srv630959.hstgr.cloud"
+serverPort = 7_000
+transport.protocol = "kcp"
+
+[webServer]
+addr = "0.0.0.0"
+port = 7_400
+user = "frpc-user"
+password = "frpc-password"
+
+[log]
+disablePrintColor = true
+level = "trace"
+
+[auth]
+method = "oidc"
+
+[auth.oidc.tokenSource]
+type = "file"
+
+  [auth.oidc.tokenSource.file]
+  path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+[[proxies]]
+name = "http"
+type = "http"
+localIP = "envoy-proxy.envoy-gateway-system.svc.cluster.local"
+localPort = 80
+customDomains = [ "srv630959.hstgr.cloud", "*.jynolen.fr" ]
+
+[[proxies]]
+name = "https"
+type = "https"
+localIP = "envoy-proxy.envoy-gateway-system.svc.cluster.local"
+localPort = 443
+customDomains = [ "srv630959.hstgr.cloud", "*.jynolen.fr" ]

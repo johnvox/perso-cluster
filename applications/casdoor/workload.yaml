@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: casdoor
+  namespace: casdoor
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - env:
+            - name: RUNNING_IN_DOCKER
+              value: 'true'
+          image: casbin/casdoor:3.49.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          name: casdoor
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources: {}
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /conf
+              name: config-volume
+      securityContext: {}
+      volumes:
+        - name: config-volume
+          projected:
+            defaultMode: 420
+            sources:
+              - secret:
+                  items:
+                    - key: app.conf
+                      path: app.conf
+                  name: casdoor-config

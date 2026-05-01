@@ -1,0 +1,48 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: webhook-argocd-server
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: webhook-argocd-server
+  extAuth:
+    http:
+      path: /webhook
+      backendRef:
+        name: github-webhook-validator
+        port: 8080
+        namespace: argocd
+      headersToBackend:
+      - X-Hub-Signature-256
+    headersToExtAuth:
+    - X-Hub-Signature-256
+    bodyToExtAuth:
+      maxRequestBytes: 1048576
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: webhook-argocd-server
+  annotations:
+    external-dns.alpha.kubernetes.io/target: gw.jynolen.fr
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: argocd
+  hostnames:
+    - webhook.argocd.jynolen.fr
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: argocd-server
+      port: 80
+      weight: 1
+    matches:
+    - path:
+        type: Exact
+        value: /api/webhook

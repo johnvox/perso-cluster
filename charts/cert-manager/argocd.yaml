@@ -1,0 +1,4 @@
+charts:
+- repoURL: quay.io/jetstack/charts
+  targetRevision: v1.20.0
+  chart: cert-manager

@@ -1,0 +1,73 @@
+crds:
+  gatewayAPI:
+    enabled: true
+    channel: standard
+  envoyGateway:
+    enabled: true
+
+config:
+  envoyGateway:
+    gateway:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+    # provider:
+    #   type: Kubernetes
+    #   kubernetes:
+    #     rateLimitDeployment:
+    #       container:
+    #         image: docker.io/envoyproxy/ratelimit:c8765e89
+    #     shutdownManager:
+    #       image: docker.io/envoyproxy/gateway-dev:3c2fc03
+    logging:
+      encoder: JSON
+      level:
+        provider: info
+        gateway-api: info
+        xds-translator: info
+        xds-server: info
+        xds: info
+        infrastructure: info
+        global-ratelimit: info
+    extensionApis:
+      enableBackend: true
+    gatewayAPI:
+      enabled:
+      - XListenerSet
+      - XBackendTrafficPolicy
+
+global:
+  images:
+    envoyGateway:
+      image: docker.io/envoyproxy/gateway:v1.8.0-rc.0
+
+# extraDeploy:
+# - apiVersion: rbac.authorization.k8s.io/v1
+#   kind: ClusterRole
+#   metadata:
+#     name: extra-permission-envoy
+#   rules:
+#     - apiGroups:
+#         - gateway.networking.k8s.io
+#       resources:
+#         - listenersets
+#       verbs:
+#         - get
+#         - list
+#         - watch
+#     - apiGroups:
+#         - gateway.networking.k8s.io
+#       resources:
+#         - listenersets/status
+#       verbs:
+#         - update
+# - apiVersion: rbac.authorization.k8s.io/v1
+#   kind: ClusterRoleBinding
+#   metadata:
+#     name: extra-permission-envoy-binding
+#   roleRef:
+#     apiGroup: rbac.authorization.k8s.io
+#     kind: ClusterRole
+#     name: extra-permission-envoy
+#   subjects:
+#     - kind: ServiceAccount
+#       name: envoy-gateway
+#       namespace: envoy-gateway-system

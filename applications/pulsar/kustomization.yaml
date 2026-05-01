@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  annotations: 
+    argocd.argoproj.io/revision: main
+
+namespace: pulsar
+
+resources:
+- route.yaml
+- secrets.yaml
+
+helmGlobals:
+  chartHome: .charts
+
+helmCharts:
+- name: pulsar
+  version: 4.5.0
+  repo: https://pulsar.apache.org/charts
+  releaseName: pulsar
+  additionalValuesFiles:
+  - values.pulsar.yaml
+
+# - name: pulsar-resources-operator
+#   version: v0.19.0
+#   repo: https://charts.streamnative.io
+#   releaseName: pulsar-resources-operator
+
+patches:
+- target:
+    version: v1
+    kind: Service
+  patch: |-
+    - op: add
+      path: /spec/clusterIP
+      value: None
+- target:
+    version: v1
+    kind: Service
+  patch: |-
+    - op: remove
+      path: /spec/clusterIP
+- target:
+    version: v1
+    kind: Job
+    group: batch
+  patch: |-
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1hook
+      value: Sync
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1hook-delete-policy
+      value: BeforeHookCreation
+    - op: add
+      path: /spec/ttlSecondsAfterFinished
+      value: 60

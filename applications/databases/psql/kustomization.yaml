@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  annotations: 
+    argocd.argoproj.io/revision: main
+
+resources:
+- workload.yaml
+- service.yaml
+- secrets.yaml
+
+labels:
+- pairs:
+    app.kubernetes.io/instance: pgbouncer
+    app.kubernetes.io/name: pgbouncer
+  includeSelectors: true
+  includeTemplates: true
+
+configMapGenerator:
+- name: pgbouncer-config-tpl
+  files:
+  - pgbouncer.ini=config/pgbouncer.ini.tpl
+  - userlist.txt=config/userlist.txt.tpl
+  options:
+    disableNameSuffixHash: true
+
+# helmGlobals:
+#   chartHome: .charts
+
+# helmCharts:
+# - name: pgbouncer
+#   version: 4.1.5
+#   repo: oci://ghcr.io/icoretech/charts
+#   releaseName: pgbouncer
+#   additionalValuesFiles:
+#   - values.pgbouncer.yaml

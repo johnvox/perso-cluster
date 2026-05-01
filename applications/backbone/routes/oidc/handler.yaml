@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oidc-redirect
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oidc-redirect
+  template:
+    metadata:
+      labels:
+        app: oidc-redirect
+    spec:
+      containers:
+      - image: ghcr.io/johnvox/oidc-state-decoder:v1.0.0
+        imagePullPolicy: Always
+        name: oidc-state-decoder
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "100Mi"
+          requests:
+            cpu: "50m"
+            memory: "50Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oidc-redirect
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: oidc-redirect

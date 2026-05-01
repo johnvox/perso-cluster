@@ -1,0 +1,5 @@
+splunk:
+  root_endpoint: /splunk
+  license_uri: free
+  hec:
+    ssl: False

@@ -1,0 +1,13 @@
+exporters:
+  otlp_grpc/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+service:
+  pipelines:
+    traces/jaeger:
+      receivers:
+      - forward/output
+      processors: []
+      exporters:
+      - otlp_grpc/jaeger

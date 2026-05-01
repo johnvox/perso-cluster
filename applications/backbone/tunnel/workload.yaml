@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: frpc
+  name: frpc
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frpc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frpc
+    spec:
+      volumes:
+      - name: gw-tunnel-frpc-config
+        configMap:
+          name: gw-tunnel-frpc-config
+          defaultMode: 420
+      - name: kube-api-access
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 900
+              path: token
+          defaultMode: 420
+      containers:
+      - name: frpc
+        image: frpc
+        command:
+        - frpc
+        - "-c"
+        - /frp/frpc.toml
+        ports:
+        - containerPort: 7400
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - name: gw-tunnel-frpc-config
+          mountPath: /frp
+        - name: kube-api-access
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      serviceAccountName: default
+      nodeName: fedora
+      securityContext: {}

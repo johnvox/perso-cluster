@@ -1,0 +1,100 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: system-charts
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      requeueAfterSeconds: 10
+      repoURL: https://github.com/jynolen/perso-cluster.git
+      revision: HEAD
+      files:
+      - path: 'charts/*/argocd.yaml'
+      values:
+        extra: |
+          {
+            "kustomize": {
+              "commonAnnotations": {
+                "argocd.argoproj.io/sync-wave": "100"
+              }
+            }
+          }
+        helm: |
+          {
+            "helm": {
+              "ignoreMissingValueFiles": true,
+              "valueFiles": [ 
+                "$values/charts/{{ index .path.segments 1 }}/values.yaml"
+              ]
+            }
+          }
+  templatePatch: |
+    {{- $originalExtra := .values.extra | fromJson -}}
+    {{- $originalHelm := .values.helm | fromJson -}}
+    {{- $mergeExtra := mergeOverwrite $originalExtra (. | dig "extra" (dict)) -}}
+    {{- $_ := unset $mergeExtra "enabled" -}}
+    metadata:
+      labels: {{. | dig "application" "labels" (dict) | toRawJson }}
+      annotations:  {{. | dig "application" "annotations" (dict) | toRawJson }}
+    spec:
+      revisionHistoryLimit: {{. | dig "application" "revisionHistoryLimit" 3 }}
+
+      ignoreDifferences:
+      {{- range $ignoreDiff := (. | dig "application" "ignoreDifferences" (list) ) }}
+        - {{ $ignoreDiff }}
+      {{- end }}
+
+      info:
+      {{- range $info := (. | dig "application" "info" (list) ) }}
+        - {{ $info }}
+      {{- end }}
+
+      {{- if (. | dig "application" "sourceHydrator" nil )  }}
+      sourceHydrator: {{ .application.sourceHydrator | toRawJson }}
+      {{- end }}
+
+      {{- if (. | dig "application" "syncPolicy" nil )  }}
+      syncPolicy: {{ .application.syncPolicy | toRawJson }}
+      
+      {{ else }}
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+      {{- end }}
+
+      sources:
+      {{- range $chart := (. | dig "charts" list ) -}}
+      {{- $targetChart := ternary (deepCopy $originalHelm) (dict) (hasKey $chart "chart") -}}
+      {{ $mergeChart := mergeOverwrite $targetChart $chart }}
+        - {{ $targetChart | toRawJson }}
+      {{- end }}
+
+        - repoURL: https://github.com/jynolen/perso-cluster
+          targetRevision: {{. | dig "application" "targetRevision" "HEAD" }}
+          ref: values
+      
+      {{- if (. | dig "extra" "enabled" (false) )  }}
+        - repoURL: https://github.com/jynolen/perso-cluster
+          path: 'charts/{{ index .path.segments 1 }}/extra'
+          targetRevision: {{. | dig "application" "targetRevision" "HEAD" }}
+          {{- range $k, $v := $mergeExtra }}
+          {{ $k }}: {{ $v | toRawJson }}
+          {{- end }}
+      {{- end }}
+      {{- range $extra := (. | dig "extras" list ) -}}
+        - {{ $extra | toRawJson }}
+      {{- end }}
+  template:
+    metadata:
+      name: '{{ . | dig "application" "name" ( index .path.segments 1 ) }}'
+    spec:
+      project: system
+      destination:
+        server: '{{ . | dig "application" "server" "https://kubernetes.default.svc" }}'
+        namespace: '{{ . | dig "application" "namespace" ( index .path.segments 1 ) }}'
+  syncPolicy:
+    applicationsSync: create-update

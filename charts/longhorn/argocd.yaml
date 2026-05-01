@@ -1,0 +1,7 @@
+application:
+  namespace: longhorn-system
+
+charts:
+- repoURL: https://charts.longhorn.io
+  targetRevision: 1.11.1
+  chart: longhorn

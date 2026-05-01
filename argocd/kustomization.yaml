@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace: argocd
+
+resources:
+- https://github.com/argoproj/argo-cd.git//manifests/cluster-install?ref=v3.3.6
+- projects.yaml
+- self.yaml
+- system.applicationset.yaml
+- application.applicationset.yaml
+
+transformers:
+- namespace.yaml
+
+configMapGenerator:
+  - name: argocd-cmd-params-cm
+    behavior: merge
+    literals:
+      - server.insecure=true
+      - applicationsetcontroller.enable.new.git.file.globbing=true
+      - otlp.address=otel.backbone:4317
+      - reposerver.log.level=warn
+      - controller.log.level=warn
+      - server.log.level=warn
+      - applicationsetcontroller.log.level=warn
+      - notificationscontroller.log.level=warn
+      - dexserver.log.level=warn
+      - commitserver.log.level=warn      
+    options:
+      disableNameSuffixHash: true
+  - name: argocd-cm
+    behavior: merge
+    literals:
+      - url=https://argocd.jynolen.fr
+      - kustomize.buildOptions=--enable-helm
+    files:
+      - files/dex.config
+    options:
+      disableNameSuffixHash: true
+  - name: argocd-rbac-cm
+    behavior: merge
+    literals:
+      - scopes="[groups]"
+    files:
+      - files/policy.csv
+    options:
+      disableNameSuffixHash: true
+
+patches:
+- target:
+    group: apiextensions.k8s.io
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/rgocd.argoproj.io~1sync-options
+      value: "ServerSideApply=true"

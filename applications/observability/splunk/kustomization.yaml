@@ -1,0 +1,40 @@
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - workload.yaml
+  - secrets.yaml
+  - service.yaml
+
+labels:
+- pairs:
+    app.kubernetes.io/component: splunk
+  includeSelectors: true
+  includeTemplates: true
+
+configMapGenerator:
+  # - name: splunk-probe-configmap
+  #   files:
+  #     - probe/livenessProbe.sh
+  #     - probe/readinessProbe.sh
+  #     - probe/startupProbe.sh
+  - name: splunk-config
+    files:
+      - config/default.yaml
+    literals:
+      - manualUpdate=off
+  - name: splunk-config-env
+    literals:
+      - SPLUNK_DECLARATIVE_ADMIN_PASSWORD=true
+      - SPLUNK_DEFAULTS_URL=/mnt/config/default.yaml,/mnt/splunk-secrets/default.yaml
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
+      - SPLUNK_HOME=/opt/splunk
+      - SPLUNK_HOME_OWNERSHIP_ENFORCEMENT=false
+      # - SPLUNK_OPERATOR_K8_LIVENESS_DRIVER_FILE_PATH=/tmp/splunk_operator_k8s/probes/k8_liveness_driver.sh
+      - SPLUNK_ROLE=splunk_standalone
+      - SPLUNK_SKIP_CLUSTER_BUNDLE_PUSH=true
+      - SPLUNK_START_ARGS=--accept-license

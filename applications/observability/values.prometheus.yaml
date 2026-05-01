@@ -1,0 +1,40 @@
+grafana:
+  enabled: false
+  forceDeployDashboards: true
+  operator:
+    dashboardsConfigMapRefEnabled: true
+    folder: kube-prometheus-stack
+    matchLabels:
+      app.kubernetes.io/component: grafana
+      app.kubernetes.io/name: observability
+
+extraManifests:
+- apiVersion: grafana.integreatly.org/v1beta1
+  kind: GrafanaDatasource
+  metadata:
+    name: prometheus
+    annotations: {}
+  spec:
+    allowCrossNamespaceImport: true
+    instanceSelector:
+      matchLabels:
+        app.kubernetes.io/component: grafana
+        app.kubernetes.io/name: observability
+    datasource:
+      name: prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus-operated.observability.svc.cluster.local:9090
+      isDefault: true
+      jsonData:
+        "tlsSkipVerify": true
+        "timeInterval": "5s"
+
+prometheus:
+  enabled: true
+  service:
+    enabled: false
+
+alertmanager:
+  service:
+    enabled: false

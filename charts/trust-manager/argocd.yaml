@@ -1,0 +1,7 @@
+application:
+  namespace: cert-manager
+
+charts:
+- repoURL: quay.io/jetstack/charts
+  targetRevision: v0.22.0
+  chart: trust-manager

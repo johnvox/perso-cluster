@@ -1,0 +1,14 @@
+processors:
+  filter/argocd:
+    log_conditions:
+    - resource.attributes["k8s.namespace.name"] != "argocd"
+
+service:
+  pipelines:
+    logs/argocd:
+      receivers:
+      - forward
+      processors:
+      - filter/argocd
+      exporters:
+      - forward/output

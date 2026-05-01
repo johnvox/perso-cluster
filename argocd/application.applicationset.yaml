@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applications-charts
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      requeueAfterSeconds: 10
+      repoURL: https://github.com/jynolen/perso-cluster.git
+      revision: main
+      files:
+      - path: 'applications/*/kustomization.yaml'
+      values:
+        server: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: '{{ .path.basename }}'
+    spec:
+      project: application
+      source:
+        repoURL: https://github.com/jynolen/perso-cluster
+        path: '{{ .path.path }}'
+        targetRevision: '{{ . | dig "metadata" "annotations" "argocd.argoproj.io/revision" "HEAD" }}'
+      destination:
+        server: '{{ .values.server }}'
+        namespace: '{{ coalesce (. | dig "namespace" nil) (. | dig "metadata" "annotations" "argocd.argoproj.io/namespace" nil ) }}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace={{ coalesce (. | dig "namespace" nil) (. | dig "metadata" "annotations" "argocd.argoproj.io/namespace" nil ) | any }}
+  syncPolicy:
+    applicationsSync: create-update

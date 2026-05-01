@@ -1,0 +1,113 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: envoy
+spec:
+  parentRef:
+    group: gateway.networking.k8s.io	
+    kind: Gateway
+    name: envoy-proxy
+    namespace: backbone
+  listeners:
+  - name: envoy
+    protocol: HTTPS
+    hostname: "envoy.jynolen.fr"
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: envoy-crt
+        group: ''	
+        kind: Secret
+  - name: kube
+    protocol: HTTPS
+    hostname: "kubernetes.jynolen.fr"
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: kubernetes-crt
+        group: ''	
+        kind: Secret
+    allowedRoutes:
+      namespaces:
+        from: All
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: envoy
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: envoy
+  hostnames:
+    - envoy.jynolen.fr
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+      - type: ExtensionRef
+        extensionRef:
+          group: gateway.envoyproxy.io
+          kind: HTTPRouteFilter
+          name: direct-response
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: direct-response
+spec:
+  directResponse:
+    contentType: text/plain
+    statusCode: 200
+    body:
+      type: Inline
+      inline: "Hello from Envoy"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: cluster
+  namespace: default
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: envoy
+      namespace: backbone
+  hostnames:
+    - kubernetes.jynolen.fr
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: kubernetes
+          port: 443
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: cluster-tls
+  namespace: default
+spec:
+  targetRefs:
+  - group: ''
+    kind: Service
+    name: kubernetes
+    sectionName: https
+  validation:
+    caCertificateRefs:
+    - name: kube-root-ca.crt
+      group: ''
+      kind: ConfigMap
+    hostname: kubernetes

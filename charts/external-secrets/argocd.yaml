@@ -1,0 +1,10 @@
+application:
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
+charts:
+- repoURL: ghcr.io/external-secrets/charts
+  targetRevision: 2.2.0
+  chart: external-secrets
