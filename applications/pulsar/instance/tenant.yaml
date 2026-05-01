@@ -36,7 +36,7 @@ spec:
 apiVersion: resource.streamnative.io/v1alpha1
 kind: PulsarTopic
 metadata:
-  name: test-topic
+  name: test-otlp
 spec:
   name: persistent://test/testns/otlp
   connectionRef:
