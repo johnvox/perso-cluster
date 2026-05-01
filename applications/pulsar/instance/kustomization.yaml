@@ -9,3 +9,4 @@ namespace: pulsar
 resources:
 - connection.yaml
 - tenant.yaml
+- function.yaml

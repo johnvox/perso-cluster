@@ -2,37 +2,15 @@ apiVersion: resource.streamnative.io/v1alpha1
 kind: PulsarFunction
 metadata:
   name: test-pulsar-function
-  namespace: default
 spec:
-  autoAck: true
   className: org.apache.pulsar.functions.api.examples.ExclamationFunction
-  cleanupSubscription: true
   connectionRef:
-    name: "test-pulsar-connection"
-  customRuntimeOptions: {}
-  deadLetterTopic: dl-topic
-  exposePulsarAdminClientEnabled: false
-  forwardSourceMessageProperty: true
+    name: pulsar
   inputs:
-  - input
+  - otlp
   jar:
     url: function://public/default/api-examples@v3.2.3.3
-  lifecyclePolicy: CleanUpAfterDeletion
-  logTopic: func-log
-  maxMessageRetries: 101
   name: test-pulsar-function
-  namespace: default
-  output: output
-  parallelism: 1
-  processingGuarantees: ATLEAST_ONCE
-  retainKeyOrdering: true
-  retainOrdering: false
-  secrets:
-    SECRET1:
-      key: hello
-      path: sectest
-  skipToLatest: true
-  subName: test-sub
-  subscriptionPosition: Latest
-  tenant: public
-  timeoutMs: 6666
+  namespace: testns
+  tenant: test
+  output: dst
