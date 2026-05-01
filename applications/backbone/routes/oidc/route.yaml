@@ -22,7 +22,7 @@ spec:
       accessToken: EnvoyAccessToken
       idToken: EnvoyIdToken
   authorization:
-    defaultAction: Deny
+    defaultAction: Allow
     rules:
     - name: "allow-jwt-claim"
       action: Allow
@@ -46,10 +46,10 @@ spec:
         - header: X-Forwarded-Email
           claim: email
         - header: X-Forwarded-Roles
-          claim: roles               
+          claim: roles
         extractFrom: 
           cookies:
-            - "envoy-access-token"
+            - EnvoyAccessToken
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
