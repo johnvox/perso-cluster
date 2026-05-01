@@ -20,11 +20,10 @@ helmCharts:
   releaseName: pulsar
   additionalValuesFiles:
   - values.pulsar.yaml
-
-# - name: pulsar-resources-operator
-#   version: v0.19.0
-#   repo: https://charts.streamnative.io
-#   releaseName: pulsar-resources-operator
+- name: pulsar-resources-operator
+  version: v0.19.0
+  repo: https://charts.streamnative.io
+  releaseName: pulsar-resources-operator
 
 patches:
 - target:
