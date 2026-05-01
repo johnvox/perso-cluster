@@ -35,10 +35,12 @@ prometheus:
   service:
     enabled: false
   prometheusSpec:
+    externalUrl: /prometheus
     routePrefix: /prometheus
 
 alertmanager:
   service:
     enabled: false
   alertmanagerSpec:
+    externalUrl: /alertmanager  
     routePrefix: /alertmanager
