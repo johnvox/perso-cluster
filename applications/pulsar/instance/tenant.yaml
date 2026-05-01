@@ -1,9 +1,9 @@
 apiVersion: resource.streamnative.io/v1alpha1
 kind: PulsarTenant
 metadata:
-  name: test-tenant
+  name: test
 spec:
-  name: test-tenant
+  name: test
   connectionRef:
     name: pulsar
   adminRoles:
