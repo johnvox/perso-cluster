@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: splunk-standalone
+  annotations:
+    reloader.stakater.com/rollout-strategy: "restart"
 spec:
   replicas: 1
   revisionHistoryLimit: 2
