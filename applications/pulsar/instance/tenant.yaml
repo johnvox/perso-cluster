@@ -10,3 +10,45 @@ spec:
   - admin
   - ops
   lifecyclePolicy: CleanUpAfterDeletion
+---
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarNamespace
+metadata:
+  name: testns
+spec:
+  name: test/testns
+  connectionRef:
+    name: pulsar
+  lifecyclePolicy: CleanUpAfterDeletion
+  bundles: 2
+  messageTTL: 1h
+---
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarTopic
+metadata:
+  name: test-topic
+spec:
+  name: persistent://test/testns/src
+  connectionRef:
+    name: pulsar
+  persistent: true
+---
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarTopic
+metadata:
+  name: test-topic
+spec:
+  name: persistent://test/testns/otlp
+  connectionRef:
+    name: pulsar
+  persistent: true
+---
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarTopic
+metadata:
+  name: test-topic
+spec:
+  name: persistent://test/testns/dst
+  connectionRef:
+    name: pulsar
+  persistent: true

@@ -1,6 +1,6 @@
 exporters:
   pulsar:
     endpoint: pulsar://pulsar-proxy.pulsar.svc.cluster.local:6650
-    topic: otlp
+    topic: test/testns/otlp
     encoding: otlp_json
     timeout: 10s
