@@ -7,8 +7,16 @@ spec:
     server:
       root_url: https://observability.jynolen.fr/grafana  
       serve_from_sub_path: 'true'
-[auth.jwt]
-
+    auth.jwt:
+      enabled: "true"
+      header_name: X-Auth-Token
+      username_claim: name
+      email_claim: email
+      auto_sign_up: "true"
+      jwk_set_url: https://casdoor.open.jynolen.fr/.well-known/jwks
+      role_attribute_path: >
+        contains(roles[*].name, 'grafana.admin') && 'GrafanaAdmin' 
+        || contains(roles[*].name, 'grafana.editor') && 'Editor'
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource

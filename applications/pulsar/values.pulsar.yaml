@@ -67,7 +67,7 @@ dekaf:
     - name: DEKAF_BASE_PATH
       value: /dekaf
     - name: DEKAF_PUBLIC_BASE_URL
-      value: https://dev.pulsar.jynolen.fr/dekaf
+      value: https://pulsar.jynolen.fr/dekaf
     livenessProbe:
       httpGet:
         path: /dekaf/health

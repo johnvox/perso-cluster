@@ -21,35 +21,43 @@ spec:
     cookieNames:
       accessToken: EnvoyAccessToken
       idToken: EnvoyIdToken
-  authorization:
-    defaultAction: Allow
-    rules:
-    - name: "allow-jwt-claim"
-      action: Allow
-      principal:
-        jwt:
-          provider: cassdoor
-          claims:
-          - name: iss
-            valueType: String
-            values:
-            - https://casdoor.open.jynolen.fr
-  jwt:
-    providers:
-      - name: cassdoor
-        issuer: https://casdoor.open.jynolen.fr
-        remoteJWKS:
-          uri: https://casdoor.open.jynolen.fr/.well-known/jwks
-        claimToHeaders:
-        - header: X-Forwarded-User
-          claim: name
-        - header: X-Forwarded-Email
-          claim: email
-        - header: X-Forwarded-Roles
-          claim: roles
-        extractFrom: 
-          cookies:
-            - EnvoyAccessToken
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyExtensionPolicy
+metadata:
+  name: oidc
+  namespace: backbone
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: envoy-proxy
+  lua:
+    - type: Inline
+      inline: |
+        local function split(str, delimiter)
+            local returnTable = {}
+            for k, v in string.gmatch(str or "", "([^" .. delimiter .. "]+)") 
+            do
+                returnTable[#returnTable+1] = k
+            end
+            return returnTable
+        end
+
+        local function tomap(tbl)
+            local returnTable = {}
+            for _, i in pairs(tbl or {}) do
+                for k, v in string.gmatch(i, "(%w+)=(.+)") do
+                    returnTable[k] = v
+                end
+            end
+            return returnTable
+        end
+        
+        function envoy_on_request(request_handle)
+          c=tomap(split(request_handle:headers():get("cookie"), ";"))
+          request_handle:headers():add("X-Auth-Token", c["EnvoyIdToken"] or "")
+        end
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
