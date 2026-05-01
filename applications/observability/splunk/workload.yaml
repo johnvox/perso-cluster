@@ -14,7 +14,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: splunk-config-env
-          image: docker.io/splunk/splunk:10.2.2
+          image: docker.io/splunk/splunk:10.2.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
