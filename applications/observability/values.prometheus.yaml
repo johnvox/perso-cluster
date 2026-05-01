@@ -24,7 +24,7 @@ extraManifests:
       name: prometheus
       type: prometheus
       access: proxy
-      url: http://prometheus-operated.observability.svc.cluster.local:9090
+      url: http://prometheus-operated.observability.svc.cluster.local:9090/prometheus
       isDefault: true
       jsonData:
         "tlsSkipVerify": true
