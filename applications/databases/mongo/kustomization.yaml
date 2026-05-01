@@ -12,5 +12,6 @@ helmCharts:
   version: 1.8.0
   repo: https://mongodb.github.io/helm-charts
   releaseName: mongodb-kubernetes
+  includeCRDs: true  
   additionalValuesFiles:
   - values.mongo.yaml
