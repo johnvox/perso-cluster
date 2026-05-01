@@ -34,7 +34,11 @@ prometheus:
   enabled: true
   service:
     enabled: false
+  prometheusSpec:
+    routePrefix: /prometheus
 
 alertmanager:
   service:
     enabled: false
+  alertmanagerSpec:
+    routePrefix: /alertmanager
