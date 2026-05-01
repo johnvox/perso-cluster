@@ -4,6 +4,9 @@ metadata:
   annotations: 
     argocd.argoproj.io/revision: main
 
+resources:
+  - instance.yaml
+
 helmGlobals:
   chartHome: .charts
 
