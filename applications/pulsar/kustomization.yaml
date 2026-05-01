@@ -9,6 +9,7 @@ namespace: pulsar
 resources:
 - route.yaml
 - secrets.yaml
+- instance
 
 helmGlobals:
   chartHome: .charts

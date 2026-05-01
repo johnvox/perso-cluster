@@ -1,0 +1,12 @@
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarTenant
+metadata:
+  name: test-tenant
+spec:
+  name: test-tenant
+  connectionRef:
+    name: pulsar
+  adminRoles:
+  - admin
+  - ops
+  lifecyclePolicy: CleanUpAfterDeletion
