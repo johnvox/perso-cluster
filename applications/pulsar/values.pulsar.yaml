@@ -4,7 +4,7 @@ victoria-metrics-k8s-stack:
 components:
   toolset: false
   # oxia: true
-  functions: false
+  functions: true
   dekaf: true
 
 volumes:
