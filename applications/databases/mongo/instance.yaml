@@ -13,6 +13,21 @@ spec:
   users: []
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            resources:
+              requests:
+                storage: 5Gi
+        - metadata:
+            name: log-volume
+          spec:
+            resources:
+              requests:
+                storage: 512Mi
 ---
 apiVersion: mongodb.com/v1
 kind: MongoDBUser
