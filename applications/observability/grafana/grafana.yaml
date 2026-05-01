@@ -7,6 +7,8 @@ spec:
     server:
       root_url: https://observability.jynolen.fr/grafana  
       serve_from_sub_path: 'true'
+[auth.jwt]
+
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
