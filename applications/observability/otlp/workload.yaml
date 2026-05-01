@@ -17,6 +17,7 @@ spec:
             - --config=/conf/internal.yaml
             - --config=/conf/output.splunk.yaml
             - --config=/conf/output.jaeger.yaml   
+            - --config=/conf/output.pulsar.yaml
             - --config=/conf/processor.argocd.yaml
             - --config=/conf/processor.default.yaml       
             - --feature-gates=confmap.enableMergeAppendOption

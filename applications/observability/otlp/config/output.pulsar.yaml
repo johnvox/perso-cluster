@@ -4,3 +4,11 @@ exporters:
     topic: test/testns/otlp
     encoding: otlp_json
     timeout: 10s
+
+service:
+  pipelines:
+    logs/pulsar:
+      receivers:
+      - forward/output
+      exporters:
+      - pulsar
