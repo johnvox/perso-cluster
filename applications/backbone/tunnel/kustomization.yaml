@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: backbone
+
 resources:
 - workload.yaml
 
@@ -15,3 +17,7 @@ configMapGenerator:
     disableNameSuffixHash: true
   files:
   - frpc.toml
+
+replicas:
+- name: frpc
+  count: 1

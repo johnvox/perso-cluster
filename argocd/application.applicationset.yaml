@@ -13,13 +13,14 @@ spec:
       repoURL: https://github.com/jynolen/perso-cluster.git
       revision: main
       files:
-      - path: 'applications/*/kustomization.yaml'
+      - path: 'applications/backbone/*/kustomization.yaml'
       - path: 'applications/system/*/kustomization.yaml'
+      - path: 'applications/client/*/kustomization.yaml'
       values:
         server: https://kubernetes.default.svc
   template:
     metadata:
-      name: '{{ .path.basename }}'
+      name: '{{ index .path.segments 1 }}-{{ .path.basename }}'
     spec:
       project: application
       source:
