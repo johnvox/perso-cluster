@@ -7,7 +7,7 @@ resources:
 - https://github.com/argoproj/argo-cd.git//manifests/cluster-install?ref=v3.3.6
 - projects.yaml
 - self.yaml
-- system.applicationset.yaml
+# - system.applicationset.yaml
 - application.applicationset.yaml
 
 transformers:
