@@ -9,7 +9,7 @@ helmGlobals:
 helmCharts:
 - name: external-secrets
   version: 2.2.0
-  repo: https://ghcr.io/external-secrets/charts
+  repo: oci://ghcr.io/external-secrets/charts
   releaseName: external-secrets
   includeCRDs: true
 
