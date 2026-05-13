@@ -111,30 +111,6 @@ spec:
       kind: ConfigMap
     hostname: kubernetes
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: cluster
-spec:
-  parentRefs:
-    - group: gateway.networking.k8s.io	
-      kind: ListenerSet
-      name: envoy
-      namespace: backbone
-  hostnames:
-    - kubernetes.jynolen.fr
-  rules:
-    - backendRefs:
-        - group: ""
-          kind: Service
-          name: kubernetes
-          port: 443
-          weight: 1
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
----
 apiVersion: v1
 kind: Service
 metadata:
