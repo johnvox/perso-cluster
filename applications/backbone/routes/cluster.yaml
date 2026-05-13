@@ -116,17 +116,5 @@ kind: Service
 metadata:
   name: kubernetes
 spec:
-  ports:
-  - name: https
-    protocol: TCP
-    port: 443
-    targetPort: 6443
-  clusterIP: 172.21.0.1
-  clusterIPs:
-  - 172.21.0.1
-  type: ClusterIP
-  sessionAffinity: None
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  internalTrafficPolicy: Cluster
+  type: ExternalName
+  externalName: kubernetes.default.svc.cluster.local
