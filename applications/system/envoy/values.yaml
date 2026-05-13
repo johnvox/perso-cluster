@@ -1,0 +1,32 @@
+crds:
+  gatewayAPI:
+    enabled: true
+    channel: standard
+  envoyGateway:
+    enabled: true
+
+config:
+  envoyGateway:
+    gateway:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+    logging:
+      encoder: JSON
+      level:
+        provider: info
+        gateway-api: info
+        xds-translator: info
+        xds-server: info
+        xds: info
+        infrastructure: info
+        global-ratelimit: info
+    extensionApis:
+      enableBackend: true
+    gatewayAPI:
+      enabled:
+      - XListenerSet
+      - XBackendTrafficPolicy
+
+global:
+  images:
+    envoyGateway:
+      image: docker.io/envoyproxy/gateway:v1.8.0-rc.0

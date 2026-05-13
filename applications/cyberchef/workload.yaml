@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-      - image: ghcr.io/gchq/cyberchef:11.0.0
+      - image: ghcr.io/gchq/cyberchef:latest
         imagePullPolicy: IfNotPresent
         name: cyberchef
         ports:

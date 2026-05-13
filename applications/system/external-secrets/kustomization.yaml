@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: external-secrets
+
+helmGlobals:
+  chartHome: .charts
+
+helmCharts:
+- name: external-secrets
+  version: 2.2.0
+  repo: https://ghcr.io/external-secrets/charts
+  releaseName: external-secrets
+  includeCRDs: true
+
+patches:
+- target:
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1sync-options
+      value: ServerSideApply=true

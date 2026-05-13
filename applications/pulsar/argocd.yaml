@@ -1,4 +1,0 @@
-charts:
-- repoURL: https://pulsar.apache.org/charts
-  targetRevision: 4.5.0
-  chart: pulsar

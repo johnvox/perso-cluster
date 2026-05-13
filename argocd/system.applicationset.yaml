@@ -38,8 +38,8 @@ spec:
     {{- $mergeExtra := mergeOverwrite $originalExtra (. | dig "extra" (dict)) -}}
     {{- $_ := unset $mergeExtra "enabled" -}}
     metadata:
-      labels: {{. | dig "application" "labels" (dict) | toRawJson }}
-      annotations:  {{. | dig "application" "annotations" (dict) | toRawJson }}
+      labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
+      annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
     spec:
       revisionHistoryLimit: {{. | dig "application" "revisionHistoryLimit" 3 }}
 

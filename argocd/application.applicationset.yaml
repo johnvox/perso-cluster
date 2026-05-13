@@ -14,6 +14,7 @@ spec:
       revision: main
       files:
       - path: 'applications/*/kustomization.yaml'
+      - path: 'applications/system/*/kustomization.yaml'
       values:
         server: https://kubernetes.default.svc
   template:

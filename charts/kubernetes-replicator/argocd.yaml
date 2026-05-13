@@ -1,4 +1,0 @@
-charts:
-- repoURL: https://helm.mittwald.de
-  targetRevision: v2.12.0
-  chart: kubernetes-replicator
