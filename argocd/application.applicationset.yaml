@@ -36,7 +36,7 @@ spec:
     metadata:
       name: '{{ index .path.segments 1 }}-{{ .path.basename }}'
     spec:
-      revisionHistoryLimit: '{{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}'
+      revisionHistoryLimit: {{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}
       project: application
       source:
         repoURL: https://github.com/jynolen/perso-cluster
