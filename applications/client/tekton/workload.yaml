@@ -16,6 +16,7 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        allowPrivilegeEscalation: false
       containers:
       - name: github-webhook-validator
         image: github-webhook-validator
