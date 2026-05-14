@@ -16,7 +16,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: ReferenceGrant
 metadata:
   name: tekton
-  namespace: pipeline-as-code
+  namespace: pipelines-as-code
 spec:
   from:
   - group: gateway.networking.k8s.io
@@ -80,10 +80,16 @@ spec:
         - group: ""
           kind: Service
           name: pipelines-as-code-controller
-          namespace: pipeline-as-code
+          namespace: pipelines-as-code
           port: 8080
           weight: 1
       matches:
         - path:
             type: PathPrefix
             value: /pac
+      filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /            
