@@ -6,12 +6,7 @@ metadata:
     argocd.argoproj.io/ignoreDifferences: '[{"group":"apiextensions.k8s.io","kind":"CustomResourceDefinition","jsonPointers":["/spec/preserveUnknownFields"]}]'
 
 resources:
-- https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
-- https://github.com/tektoncd/pipelines-as-code/releases/download/v0.46.0/release.k8s.yaml
-- https://github.com/tektoncd/dashboard/releases/download/v0.68.0/release-full.yaml
-- https://infra.tekton.dev/tekton-releases/triggers/previous/v0.35.0/release.yaml
-- https://infra.tekton.dev/tekton-releases/triggers/previous/v0.35.0/interceptors.yaml
-- https://infra.tekton.dev/tekton-releases/chains/previous/v0.26.3/release.yaml
+- https://infra.tekton.dev/tekton-releases/operator/previous/v0.79.1/release.yaml
 - route.yaml
 
 patches:
@@ -23,11 +18,11 @@ patches:
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
 
-configMapGenerator:
-- name: pipelines-as-code
-  namespace: pipelines-as-code
-  behavior: merge
-  literals:
-  - tekton-dashboard-url=https://tekton.jynolen.fr/
-  options:
-    disableNameSuffixHash: true
+# configMapGenerator:
+# - name: pipelines-as-code
+#   namespace: pipelines-as-code
+#   behavior: merge
+#   literals:
+#   - tekton-dashboard-url=https://tekton.jynolen.fr/
+#   options:
+#     disableNameSuffixHash: true
