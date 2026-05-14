@@ -19,8 +19,6 @@ helmCharts:
   repo: oci://quay.io/jetstack/charts
   releaseName: trust-manager
   includeCRDs: true
-  additionalValuesFiles:
-  - values.yaml
 
 patches:
 - target:

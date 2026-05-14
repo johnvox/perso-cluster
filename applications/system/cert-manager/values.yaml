@@ -17,5 +17,3 @@ config:
     recursiveNameservers:
     - 1.1.1.1:53
     - 9.9.9.9:53
-
-clusterResourceNamespace: backbone
