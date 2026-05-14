@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: gocd
 
+resources:
+  - route.yaml
+
 helmGlobals:
   chartHome: .charts
 
