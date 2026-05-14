@@ -12,6 +12,12 @@ resources:
 - instance
 # - route.yaml
 
+labels:
+- pairs:
+    operator.tekton.dev/release: v0.79.1
+  includeSelectors: true
+  includeTemplates: true
+
 patches:
 - target:
     version: v1
