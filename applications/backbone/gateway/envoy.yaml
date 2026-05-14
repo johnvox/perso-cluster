@@ -83,13 +83,13 @@ spec:
       name: backbone/envoy-proxy/http
       operation:
         op: add
-        jsonPath: "..filter_chains[].filters[].typed_config"
+        jsonPath: "..filter_chains[*].filters[*].typed_config"
         path: "max_request_headers_kb"
         value: 256
     - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
       name: backbone/envoy-proxy/backbone/envoy/envoy
       operation:
         op: add
-        jsonPath: "..filter_chains[].filters[].typed_config"
+        jsonPath: "..filter_chains[*].filters[*].typed_config"
         path: "max_request_headers_kb"
         value: 256
