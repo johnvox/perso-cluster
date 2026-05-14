@@ -1,0 +1,30 @@
+# apiVersion: operator.tekton.dev/v1alpha1
+# kind: TektonResult
+# metadata:
+#   name: result
+# spec:
+#   targetNamespace: tekton-pipelines
+#   db_host: localhost
+#   db_port: 5342
+#   db_sslmode: verify-full
+#   db_sslrootcert: /etc/tls/db/ca.crt
+#   db_enable_auto_migration: true
+#   db_secret_name: # optional: custom database secret name
+#   db_secret_user_key: # optional
+#   db_secret_password_key: # optional
+#   log_level: debug
+#   logs_api: true
+#   logs_type: File
+#   logs_buffer_size: 32768
+#   logs_path: /logs
+#   auth_disable: true
+#   logging_pvc_name: tekton-logs
+#   secret_name: # optional
+#   gcs_creds_secret_name: <value>
+#   gcc_creds_secret_key: <value>
+#   gcs_bucket_name: <value>
+#   is_external_db: false
+#   loki_stack_name: #optional
+#   loki_stack_namespace: #optional
+#   prometheus_port: 9090
+#   prometheus_histogram: false

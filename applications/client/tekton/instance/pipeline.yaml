@@ -1,0 +1,53 @@
+
+apiVersion: operator.tekton.dev/v1alpha1
+kind: TektonPipeline
+metadata:
+  name: pipeline
+spec:
+  targetNamespace: tekton-pipelines
+  await-sidecar-readiness: true
+  coschedule: workspaces
+  disable-creds-init: false
+  disable-home-env-overwrite: true
+  disable-working-directory-overwrite: true
+  disable-inline-spec: "taskrun,pipelinerun,pipeline"
+  enable-api-fields: beta
+  enable-bundles-resolver: true
+  enable-cel-in-whenexpression: false
+  enable-cluster-resolver: true
+  enable-custom-tasks: true
+  enable-git-resolver: true
+  enable-hub-resolver: true
+  enable-param-enum: false
+  enable-provenance-in-status: true
+  enable-step-actions: false
+  enforce-nonfalsifiability: none
+  keep-pod-on-cancel: false
+  max-result-size: 4096
+  metrics.count.enable-reason: false
+  metrics.pipelinerun.duration-type: histogram
+  metrics.pipelinerun.level: pipeline
+  metrics.taskrun.duration-type: histogram
+  metrics.taskrun.level: task
+  # Tracing configuration (optional)
+  # traces.enabled: true
+  # traces.endpoint: "http://jaeger-collector.jaeger.svc.cluster.local:4318/v1/traces"
+  # traces.credentialsSecret: ""
+  require-git-ssh-secret-known-hosts: false
+  results-from: termination-message
+  running-in-environment-with-injected-sidecars: true
+  send-cloudevents-for-runs: false
+  set-security-context: false
+  trusted-resources-verification-no-match-policy: ignore
+  performance:
+    disable-ha: false
+    buckets: 1
+    replicas: 1
+    threads-per-controller: 2
+    kube-api-qps: 5.0
+    kube-api-burst: 10
+    statefulset-ordinals: false
+  options:
+    disabled: false
+    configMaps: {}
+    deployments: {}

@@ -1,0 +1,15 @@
+apiVersion: operator.tekton.dev/v1alpha1
+kind: TektonAddon
+metadata:
+  name: addon
+spec:
+  targetNamespace: tekton-pipelines
+  params:
+  - name: pipelineTemplates
+    value: "true"
+  - name: resolverTasks
+    value: "true"
+  - name: resolverStepActions
+    value: "true"
+  - name: communityResolverTasks
+    value: "true"
