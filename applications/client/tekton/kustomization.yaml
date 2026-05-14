@@ -9,6 +9,10 @@ resources:
 - instance
 - addons
 - route.yaml
+- secrets.yaml
+
+transformers:
+- namespace.yaml
 
 patches:
 - target:
