@@ -24,14 +24,14 @@ spec:
       labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
       annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
     spec:
-      revisionHistoryLimit: {{ dig "argocd.argoproj.io/revisionHistoryLimit" 3 $annotations}}
+      revisionHistoryLimit: {{ $annotations | dig "argocd.argoproj.io/revisionHistoryLimit" 3 }}
       ignoreDifferences:
-      {{- range $ignoreDiff := (dig "argocd.argoproj.io/ignoreDifferences" ("[]") $annotations | fromJson) }}
+      {{- range $ignoreDiff := ($annotations | dig "argocd.argoproj.io/ignoreDifferences" ("[]")  | fromJson) }}
         - {{ $ignoreDiff }}
       {{- end }}
-      sourceHydrator: {{ dig "argocd.argoproj.io/sourceHydrator" ("{}") $annotations | fromJson | toRawJson }}
-      {{- if  dig "application" "syncPolicy" nil $annotations  }}
-      syncPolicy: {{  dig "application" "syncPolicy" nil $annotations | fromJson | toRawJson }}
+      sourceHydrator: {{  $annotations | dig "argocd.argoproj.io/sourceHydrator" ("{}") | fromJson | toRawJson }}
+      {{- if  $annotations| dig "application" "syncPolicy" nil   }}
+      syncPolicy: {{ $annotations | dig "application" "syncPolicy" nil | fromJson | toRawJson }}
       {{- end }}
   template:
     metadata:
