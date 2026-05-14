@@ -4,10 +4,15 @@ kind: Deployment
 metadata:
   name: github-webhook-validator
 spec:
-  selector: 
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: github-token-validator
   replicas: 1
   revisionHistoryLimit: 2
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: github-token-validator  
     spec:
       containers:
       - name: github-webhook-validator
@@ -34,6 +39,8 @@ kind: Service
 metadata:
   name: github-webhook-validator
 spec:
+  selector:
+    app.kubernetes.io/name: github-token-validator
   ports:
   - name: https
     port: 8080

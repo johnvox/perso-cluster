@@ -21,3 +21,5 @@ configMapGenerator:
   - tekton-dashboard-url=https://tekton.jynolen.fr/
   options:
     disableNameSuffixHash: true
+
+    https://tekton.jynolen.fr/hoook
