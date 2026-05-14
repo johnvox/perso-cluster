@@ -10,6 +10,7 @@ resources:
 - addons
 - route.yaml
 - secrets.yaml
+- workload.yaml
 - repos
 
 transformers:
@@ -23,3 +24,8 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
+
+images:
+- name: github-webhook-validator
+  newName: ghcr.io/johnvox/github-webhook-validator
+  newTag: v1.0.0
