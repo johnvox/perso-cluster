@@ -25,6 +25,7 @@ patches:
 
 configMapGenerator:
 - name: pipelines-as-code
+  namespace: pipelines-as-code
   behavior: merge
   files:
   - tekton-dashboard-url=https://tekton.jynolen.fr/
