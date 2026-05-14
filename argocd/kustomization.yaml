@@ -32,6 +32,7 @@ configMapGenerator:
     literals:
       - url=https://argocd.jynolen.fr
       - kustomize.buildOptions=--enable-helm
+      - timeout.reconciliation=10s
     files:
       - files/dex.config
     options:
