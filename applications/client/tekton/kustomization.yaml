@@ -30,6 +30,7 @@ patches:
       
 configMapGenerator:
 - name: tekton-config-defaults
+  namespace: tekton-operator
   behavior: merge
   literals:
   - AUTOINSTALL_COMPONENTS=false
