@@ -19,7 +19,7 @@ spec:
       values:
         server: https://kubernetes.default.svc
   templatePatch: |
-    {{- $annotations := dig "metadata" "annotations" (dict) -}}
+    {{- $annotations := . | dig "metadata" "annotations" (dict) -}}
     metadata:
       labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
       annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
