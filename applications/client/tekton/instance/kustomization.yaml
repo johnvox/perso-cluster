@@ -1,14 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-
 resources:
-- pipeline.yaml
-- trigger.yaml
-- dashboard.yaml
-- result.yaml
-- chain.yaml
-- pipelines-as-code.yaml
-
-commonAnnotations:
-  argocd.argoproj.io/sync-wave: '1' 
+- https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
