@@ -5,3 +5,12 @@ resources:
 - https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
 - https://github.com/tektoncd/pipelines-as-code/releases/download/v0.46.0/release.k8s.yaml
 - https://github.com/tektoncd/dashboard/releases/download/v0.68.0/release-full.yaml
+
+patches:
+- target:
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1sync-options
+      value: ServerSideApply=true
