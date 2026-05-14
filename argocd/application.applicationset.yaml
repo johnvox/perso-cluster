@@ -19,12 +19,12 @@ spec:
       values:
         server: https://kubernetes.default.svc
   templatePatch: |
-    {{- $annotations := .values.extra | fromJson -}}
+    {{- $annotations := dig "metadata" "annotations" (dict) -}}
     metadata:
       labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
       annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
     spec:
-      revisionHistoryLimit: {{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}
+      revisionHistoryLimit: {{ dig "argocd.argoproj.io/revisionHistoryLimit" 3 $annotations}}
       ignoreDifferences:
       {{- range $ignoreDiff := (dig "argocd.argoproj.io/ignoreDifferences" ("[]") $annotations | fromJson) }}
         - {{ $ignoreDiff }}
