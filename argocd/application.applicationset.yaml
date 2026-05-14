@@ -24,9 +24,8 @@ spec:
       annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
     spec:
       revisionHistoryLimit: {{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}
-      ignoreDifferences:
-      {{- range $ignoreDiff := ( . | dig "metadata" "annotations" "argocd.argoproj.io/ignoreDifferences" "[]" | fromJson) }}
-        - {{ $ignoreDiff }}
+      {{- if  (. | dig "metadata" "annotations" "argocd.argoproj.io/sourceHydrator" nil)  }}
+      ignoreDifferences: {{ dig "metadata" "annotations" "argocd.argoproj.io/ignoreDifferences" "[]" | fromJson | toRawJson }}
       {{- end }}
       {{- if  (. | dig "metadata" "annotations" "argocd.argoproj.io/sourceHydrator" nil)  }}
       sourceHydrator: {{  . | dig "metadata" "annotations" "argocd.argoproj.io/sourceHydrator" "{}" | fromJson | toRawJson }}
