@@ -18,10 +18,25 @@ spec:
       - path: 'applications/client/*/kustomization.yaml'
       values:
         server: https://kubernetes.default.svc
+  templatePatch: |
+    {{- $annotations := .values.extra | fromJson -}}
+    metadata:
+      labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
+      annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
+    spec:
+      ignoreDifferences:
+      {{- range $ignoreDiff := (dig "argocd.argoproj.io/ignoreDifferences" ("[]") $annotations | fromJson) }}
+        - {{ $ignoreDiff }}
+      {{- end }}
+      sourceHydrator: {{ dig "argocd.argoproj.io/sourceHydrator" ("{}") $annotations | fromJson | toRawJson }}
+      {{- if  dig "application" "syncPolicy" nil $annotations  }}
+      syncPolicy: {{  dig "application" "syncPolicy" nil $annotations | fromJson | toRawJson }}
+      {{- end }}
   template:
     metadata:
       name: '{{ index .path.segments 1 }}-{{ .path.basename }}'
     spec:
+      revisionHistoryLimit: '{{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}'
       project: application
       source:
         repoURL: https://github.com/jynolen/perso-cluster
