@@ -22,3 +22,11 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
+
+configMapGenerator:
+- name: pipelines-as-code
+  behavior: merge
+  files:
+  - tekton-dashboard-url=https://tekton.jynolen.fr/
+  options:
+    disableNameSuffixHash: true
