@@ -5,29 +5,14 @@ metadata:
     argocd.argoproj.io/namespace: tekton
     argocd.argoproj.io/ignoreDifferences: '[{"group":"apiextensions.k8s.io","kind":"CustomResourceDefinition","jsonPointers":["/spec/preserveUnknownFields"]}]'
 
-namespace: tekton-operator
-
 resources:
-- https://github.com/tektoncd/operator.git//config/kubernetes/overlays/default?ref=v0.79.1
-- instance
-# - route.yaml
-
-labels:
-- pairs:
-    operator.tekton.dev/release: v0.79.1
-  includeSelectors: true
-  includeTemplates: true
-
-images:
-  - name: ko://github.com/tektoncd/operator/cmd/kubernetes/proxy-webhook
-    newName: ghcr.io/tektoncd/operator/proxy-webhook-f8f95c9cea9508fe8915ae3d012d15fb
-    newTag: v0.79.1
-  - name: ko://github.com/tektoncd/operator/cmd/kubernetes/operator
-    newName: ghcr.io/tektoncd/operator/operator-303303c315a48490ba6517859ef65b77
-    newTag: v0.79.1
-  - name: ko://github.com/tektoncd/operator/cmd/kubernetes/webhook
-    newName: ghcr.io/tektoncd/operator/webhook-f2bb711aa8f0c0892856a4cbf6d9ddd8
-    newTag: v0.79.1
+- https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
+- https://github.com/tektoncd/pipelines-as-code/releases/download/v0.46.0/release.k8s.yaml
+- https://github.com/tektoncd/dashboard/releases/download/v0.68.0/release-full.yaml
+- https://infra.tekton.dev/tekton-releases/triggers/previous/v0.35.0/release.yaml
+- https://infra.tekton.dev/tekton-releases/triggers/previous/v0.35.0/interceptors.yaml
+- https://infra.tekton.dev/tekton-releases/chains/previous/v0.26.3/release.yaml
+- route.yaml
 
 patches:
 - target:
@@ -37,25 +22,12 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
-- target:
-    version: v1
-    kind: Deployment
-    name: tekton-operator
-  patch: |-
-    - op: replace
-      path: /metadata/annotations/argocd.argoproj.io~1sync-options
-      value: ServerSideApply=true
 
 configMapGenerator:
-- name: tekton-config-defaults
+- name: pipelines-as-code
+  namespace: pipelines-as-code
   behavior: merge
   literals:
-  - AUTOINSTALL_COMPONENTS=false
-  options:
-    disableNameSuffixHash: true
-- name: tekton-operator-info
-  behavior: merge
-  literals:
-  - version=v0.79.1
+  - tekton-dashboard-url=https://tekton.jynolen.fr/
   options:
     disableNameSuffixHash: true
