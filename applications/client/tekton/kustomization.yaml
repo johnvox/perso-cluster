@@ -10,6 +10,7 @@ resources:
 - addons
 - route.yaml
 - secrets.yaml
+- repos
 
 transformers:
 - namespace.yaml
