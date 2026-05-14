@@ -8,7 +8,7 @@ metadata:
 namespace: tekton-operator
 
 resources:
-- https://github.com/tektoncd/operator/releases/download/v0.79.1/openshift-release.yaml
+- https://github.com/tektoncd/operator.git//config/kubernetes/overlays/default?ref=v0.79.1
 - instance
 # - route.yaml
 
