@@ -21,6 +21,7 @@ config:
         global-ratelimit: info
     extensionApis:
       enableBackend: true
+      enableEnvoyPatchPolicy: true
     gatewayAPI:
       enabled:
       - XListenerSet
