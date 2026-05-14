@@ -30,7 +30,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
   name: tekton
-  namespace: tekton-pipelines 
+  namespace: tekton
 spec:
   parentRef:
     group: gateway.networking.k8s.io	
