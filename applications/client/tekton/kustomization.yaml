@@ -20,19 +20,12 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
-- target:
-    version: v1
-    kind: CustomResourceDefinition
-  patch: |-
-    - op: add
-      path: /metadata/annotations/argocd.argoproj.io~1sync-options
-      value: ServerSideApply=true
       
-configMapGenerator:
-- name: tekton-config-defaults
-  namespace: tekton-operator
-  behavior: merge
-  literals:
-  - AUTOINSTALL_COMPONENTS=false
-  options:
-    disableNameSuffixHash: true
+# configMapGenerator:
+# - name: tekton-config-defaults
+#   namespace: tekton-operator
+#   behavior: merge
+#   literals:
+#   - AUTOINSTALL_COMPONENTS=false
+#   options:
+#     disableNameSuffixHash: true
