@@ -9,3 +9,6 @@ resources:
 - result.yaml
 - chain.yaml
 - pipelines-as-code.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: '1' 
