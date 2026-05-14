@@ -1,3 +1,5 @@
 server:
   ingress:
     enabled: false
+  persistence:
+    enabled: false
