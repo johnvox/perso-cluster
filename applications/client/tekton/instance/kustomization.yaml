@@ -8,5 +8,4 @@ resources:
 - dashboard.yaml
 - result.yaml
 - chain.yaml
-- addon.yaml
 - pipelines-as-code.yaml
