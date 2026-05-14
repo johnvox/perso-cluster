@@ -15,8 +15,6 @@ resources:
 labels:
 - pairs:
     operator.tekton.dev/release: v0.79.1
-  includeSelectors: true
-  includeTemplates: true
 
 patches:
 - target:
@@ -27,11 +25,16 @@ patches:
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
       
-# configMapGenerator:
-# - name: tekton-config-defaults
-#   namespace: tekton-operator
-#   behavior: merge
-#   literals:
-#   - AUTOINSTALL_COMPONENTS=false
-#   options:
-#     disableNameSuffixHash: true
+configMapGenerator:
+- name: tekton-config-defaults
+  behavior: merge
+  literals:
+  - AUTOINSTALL_COMPONENTS=false
+  options:
+    disableNameSuffixHash: true
+- name: tekton-operator-info
+  behavior: merge
+  literals:
+  - version=v0.79.1
+  options:
+    disableNameSuffixHash: true
