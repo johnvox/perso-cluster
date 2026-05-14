@@ -14,6 +14,8 @@ spec:
       labels:
         app.kubernetes.io/name: github-token-validator  
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: github-webhook-validator
         image: github-webhook-validator
