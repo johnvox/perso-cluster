@@ -19,19 +19,20 @@ spec:
       values:
         server: https://kubernetes.default.svc
   templatePatch: |
-    {{- $annotations := . | dig "metadata" "annotations" (dict) -}}
     metadata:
       labels: {{. | dig "metadata" "labels" (dict) | toRawJson }}
       annotations:  {{. | dig "metadata" "annotations" (dict) | toRawJson }}
     spec:
-      revisionHistoryLimit: {{ $annotations | get "argocd.argoproj.io/revisionHistoryLimit" | default 3 }}
+      revisionHistoryLimit: {{ . | dig "metadata" "annotations" "argocd.argoproj.io/revisionHistoryLimit" 3 }}
       ignoreDifferences:
-      {{- range $ignoreDiff := ($annotations | get "argocd.argoproj.io/ignoreDifferences" | default "[]"  | fromJson) }}
+      {{- range $ignoreDiff := ( . | dig "metadata" "annotations" "argocd.argoproj.io/ignoreDifferences" "[]" | fromJson) }}
         - {{ $ignoreDiff }}
       {{- end }}
-      sourceHydrator: {{  $annotations | get "argocd.argoproj.io/sourceHydrator" | default "{}" | fromJson | toRawJson }}
-      {{- if  $annotations| hasKey "argocd.argoproj.io/syncPolicy"   }}
-      syncPolicy: {{ $annotations | get "argocd.argoproj.io/syncPolicy" | fromJson | toRawJson }}
+      {{- if  (. | dig "metadata" "annotations" "argocd.argoproj.io/sourceHydrator" nil)  }}
+      sourceHydrator: {{  . | dig "metadata" "annotations" "argocd.argoproj.io/sourceHydrator" "{}" | fromJson | toRawJson }}
+      {{- end }}
+      {{- if  (. | dig "metadata" "annotations" "argocd.argoproj.io/syncPolicy" nil)  }}
+      syncPolicy: {{ . | dig "metadata" "annotations" "argocd.argoproj.io/syncPolicy" "{}" | fromJson | toRawJson }}
       {{- end }}
   template:
     metadata:
