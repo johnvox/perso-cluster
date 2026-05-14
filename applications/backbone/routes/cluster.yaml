@@ -118,3 +118,8 @@ metadata:
 spec:
   type: ExternalName
   externalName: kubernetes.default.svc.cluster.local
+  ports:
+  - name: http
+    protocol: TCP
+    port: 443
+    targetPort: 6443
