@@ -72,7 +72,6 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyPatchPolicy
 metadata:
   name: max-headers-patch-policy
-  namespace: envoy
 spec:
   targetRef:
     group: gateway.networking.k8s.io
@@ -93,4 +92,4 @@ spec:
         op: add
         jsonPath: "filter_chains[1].filters[0].typed_config"
         path: max_request_headers_kb
-        value: 256            
+        value: 256
