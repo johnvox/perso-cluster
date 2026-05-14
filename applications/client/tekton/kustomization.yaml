@@ -3,7 +3,7 @@ kind: Kustomization
 metadata:
   annotations:
     argocd.argoproj.io/namespace: tekton
-  
+    argocd.argoproj.io/ignoreDifferences: '[{"group":"v1","kind":"CustomResourceDefinition","jsonPointers":["/spec/preserveUnknownFields"]}]'
 resources:
 - https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
 - https://github.com/tektoncd/pipelines-as-code/releases/download/v0.46.0/release.k8s.yaml
@@ -17,6 +17,9 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
-    - op: add
-      path: /spec/preserveUnknownFields
-      value: false
+
+  ignoreDifferences:
+    - group: v1
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
