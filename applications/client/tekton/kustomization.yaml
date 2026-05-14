@@ -7,9 +7,9 @@ metadata:
 
 namespace: tekton
 
-resources:
-- https://infra.tekton.dev/tekton-releases/operator/previous/v0.79.1/release.yaml
-- route.yaml
+resources: []
+# - https://infra.tekton.dev/tekton-releases/operator/previous/v0.79.1/release.yaml
+# - route.yaml
 
 patches:
 - target:
