@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
   annotations:
-    argocd.argoproj.io/namespace: tekton
+    argocd.argoproj.io/namespace: tekton-pipelines
     argocd.argoproj.io/ignoreDifferences: '[{"group":"apiextensions.k8s.io","kind":"CustomResourceDefinition","jsonPointers":["/spec/preserveUnknownFields"]}]'
 
 resources:
