@@ -20,12 +20,18 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
-
-# configMapGenerator:
-# - name: pipelines-as-code
-#   namespace: pipelines-as-code
-#   behavior: merge
-#   literals:
-#   - tekton-dashboard-url=https://tekton.jynolen.fr/
-#   options:
-#     disableNameSuffixHash: true
+- target:
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/argocd.argoproj.io~1sync-options
+      value: ServerSideApply=true
+      
+configMapGenerator:
+- name: tekton-config-defaults
+  behavior: merge
+  literals:
+  - AUTOINSTALL_COMPONENTS=false
+  options:
+    disableNameSuffixHash: true
