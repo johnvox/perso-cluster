@@ -95,7 +95,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
-  name: webhook-validator-server
+  name: webhook-validator-server-hook
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
