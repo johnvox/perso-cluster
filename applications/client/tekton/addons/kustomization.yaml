@@ -18,6 +18,6 @@ configMapGenerator:
   namespace: pipelines-as-code
   behavior: merge
   literals:
-  - tekton-dashboard-url=https://tekton.jynolen.fr/
+  - tekton-dashboard-url=https://tekton.jynolen.fr
   options:
     disableNameSuffixHash: true
