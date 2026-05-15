@@ -12,6 +12,7 @@ resources:
 - secrets.yaml
 - workload.yaml
 - repos
+- webhook.yaml
 
 transformers:
 - namespace.yaml

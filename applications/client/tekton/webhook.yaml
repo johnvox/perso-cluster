@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook
+  template:
+    metadata:
+      labels:
+        app: webhook
+    spec:
+      containers:
+      - image: ghcr.io/tarampampam/webhook-tester:2.3.0
+        imagePullPolicy: IfNotPresent
+        name: webhook
+        ports:
+        - containerPort: 8080
+        env:
+        - name: AUTO_CREATE_SESSIONS
+          value: "true"
+        - name: LOG_LEVEL
+          value: "error"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "100Mi"
+          requests:
+            cpu: "100m"
+            memory: "50Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: webhook
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tekton-webhook-open
+  namespace: tekton-pipelines
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: tekton-open
+  hostnames:
+  - open.tekton.jynolen.fr
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: webhook
+          port: 8080
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tekton-webhook-open-hook
+  namespace: tekton-pipelines
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io	
+      kind: ListenerSet
+      name: tekton-open
+  hostnames:
+  - open.tekton.jynolen.fr
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: webhook
+          port: 8080
+          weight: 1
+      matches:
+        - path:
+            type: RegularExpression
+            value: '/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}.*'
+---            
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: webhook-validator-server
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: tekton-webhook-open-hook
+  extAuth:
+    http:
+      path: /webhook
+      backendRef:
+        name: github-webhook-validator
+        port: 8080
+      headersToBackend:
+      - X-Hub-Signature-256
+    headersToExtAuth:
+    - X-Hub-Signature-256
+    bodyToExtAuth:
+      maxRequestBytes: 1048576
