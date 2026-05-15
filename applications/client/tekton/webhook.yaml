@@ -69,7 +69,7 @@ spec:
   listeners:        
   - name: tekton-auth-https-webhook-test
     protocol: HTTPS
-    hostname: webhook.tekton.jynolen.fr
+    hostname: open.tekton.jynolen.fr
     port: 443
     allowedRoutes:
       namespaces:
