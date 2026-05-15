@@ -37,6 +37,8 @@ spec:
           capabilities:
             drop:
             - ALL
+          runAsUser: 65532
+          runAsGroup: 65532
           runAsNonRoot: true
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
