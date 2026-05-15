@@ -77,7 +77,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: webhook-tekton-auth-jynolen-tls
+      - name: webhook-tekton-auth-jynolen-tls-open
         group: ''	
         kind: Secret        
 ---
