@@ -142,11 +142,45 @@ spec:
     http:
       path: /webhook
       backendRef:
-        name: github-webhook-validator
-        port: 8080
+        name: xt-authz
+        port: 9000
       headersToBackend:
       - X-Hub-Signature-256
     headersToExtAuth:
     - X-Hub-Signature-256
     bodyToExtAuth:
       maxRequestBytes: 1048576
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ext-authz
+  labels:
+    app: ext-authz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ext-authz
+  template:
+    metadata:
+      labels:
+        app: ext-authz
+        app.kubernetes.io/name: ext-authz
+    spec:
+      containers:
+      - image: gcr.io/istio-testing/ext-authz:1.25-dev
+        name: ext-authz
+        ports:
+        - containerPort: 9000
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65532
+          runAsGroup: 65532
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault     

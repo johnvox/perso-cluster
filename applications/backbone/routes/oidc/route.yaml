@@ -58,6 +58,9 @@ spec:
           c=tomap(split(request_handle:headers():get("cookie"), ";"))
           request_handle:headers():add("X-Auth-Token", c["EnvoyIdToken"] or "")
         end
+
+        function envoy_on_response(response_handle)
+        end        
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
