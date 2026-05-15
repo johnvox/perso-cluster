@@ -82,7 +82,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
-  name: webhook-argocd-server
+  name: webhook-validator-server
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
@@ -94,7 +94,6 @@ spec:
       backendRef:
         name: github-webhook-validator
         port: 8080
-        namespace: argocd
       headersToBackend:
       - X-Hub-Signature-256
     headersToExtAuth:
