@@ -116,6 +116,7 @@ kind: SecurityPolicy
 metadata:
   name: webhook-validator-server
 spec:
+  mergeType: Replace
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
