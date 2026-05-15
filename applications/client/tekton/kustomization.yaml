@@ -29,4 +29,4 @@ patches:
 images:
 - name: github-webhook-validator
   newName: ghcr.io/johnvox/github-webhook-validator
-  newTag: v1.0.0
+  newTag: v1.0.1
