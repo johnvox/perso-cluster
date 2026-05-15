@@ -85,8 +85,8 @@ spec:
       matches:
         - path:
             type: Exact
-            value: /hook            
-# ---
+            value: /hook
+---
 # apiVersion: gateway.networking.k8s.io/v1
 # kind: HTTPRoute
 # metadata:
@@ -110,17 +110,16 @@ spec:
 #         - path:
 #             type: Exact
 #             value: /hook
----
+# ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
   name: webhook-validator-server
 spec:
-  mergeType: Replace
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      name: tekton-webhook
+      name: tekton
       sectionName: webhook
   extAuth:
     http:
