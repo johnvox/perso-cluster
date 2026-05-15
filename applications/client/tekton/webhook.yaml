@@ -184,3 +184,17 @@ spec:
           allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault     
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ext-authz
+  labels:
+    app: ext-authz
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: ext-authz
