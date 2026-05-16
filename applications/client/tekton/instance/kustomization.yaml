@@ -14,4 +14,4 @@ configMapGenerator:
   namespace: tekton-pipelines
   behavior: merge
   files:
-    - set-security-context=true    
+    - default-pod-template=configs/default-pod-template
