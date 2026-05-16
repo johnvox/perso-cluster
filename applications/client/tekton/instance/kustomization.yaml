@@ -5,8 +5,8 @@ resources:
 - https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
 
 configMapGenerator:
-- name: config-defaults 
+- name: feature-flags 
   namespace: tekton-pipelines
   behavior: merge
-  files:
-  - default-pod-template=configs/default-pod-template
+  literals:
+    - set-security-context=true
