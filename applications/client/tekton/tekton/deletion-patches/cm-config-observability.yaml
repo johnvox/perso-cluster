@@ -1,0 +1,6 @@
+$patch: delete
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-observability
+  namespace: tekton-pipelines-resolvers

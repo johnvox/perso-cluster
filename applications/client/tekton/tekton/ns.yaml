@@ -3,7 +3,7 @@ kind: NamespaceTransformer
 metadata:
   name: notImportantHere
   namespace: tekton
-unsetOnly: true
+unsetOnly: false
 fieldSpecs:
 - path: metadata/name
   kind: Namespace

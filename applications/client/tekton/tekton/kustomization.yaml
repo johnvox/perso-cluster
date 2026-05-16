@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- https://github.com/tektoncd/pipeline/releases/download/v1.12.0/release.yaml
+- https://github.com/tektoncd/pipelines-as-code/releases/download/v0.46.0/release.k8s.yaml
+- https://github.com/tektoncd/dashboard/releases/download/v0.68.0/release-full.yaml
+- https://github.com/tektoncd/triggers/releases/download/v0.35.0/release.yaml
+- https://github.com/tektoncd/triggers/releases/download/v0.35.0/interceptors.yaml
+- https://github.com/tektoncd/chains/releases/download/v0.26.3/release.yaml
+- https://github.com/tektoncd/pruner/releases/download/v0.3.5/release.yaml
+
+configMapGenerator:
+- name: feature-flags 
+  namespace: tekton-pipelines
+  behavior: merge
+  literals:
+    - set-security-context=true
+- name: pipelines-as-code
+  namespace: pipelines-as-code
+  behavior: merge
+  literals:
+  - tekton-dashboard-url=https://tekton.jynolen.fr
+
+transformers:
+- ns.yaml
+
+patches:
+- path: deletion-patches/ns-tekton-pipelines-resolvers.yaml
+- path: deletion-patches/ns-pipelines-as-code.yaml
+- path: deletion-patches/ns-tekton-chains.yaml
+- path: deletion-patches/ns-tekton-dashboard.yaml
+- path: deletion-patches/cm-config-logging-resolvers.yaml
+- path: deletion-patches/cm-config-logging-chains.yaml
+- path: deletion-patches/cm-config-observability.yaml
+

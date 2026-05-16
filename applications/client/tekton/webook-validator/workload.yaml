@@ -43,18 +43,4 @@ spec:
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           seccompProfile:
-            type: RuntimeDefault            
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: github-webhook-validator
-spec:
-  selector:
-    app.kubernetes.io/name: github-token-validator
-  ports:
-  - name: https
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
----
+            type: RuntimeDefault

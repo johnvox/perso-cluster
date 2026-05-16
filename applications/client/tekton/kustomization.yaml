@@ -6,13 +6,11 @@ metadata:
     argocd.argoproj.io/ignoreDifferences: '[{"group":"apiextensions.k8s.io","kind":"CustomResourceDefinition","jsonPointers":["/spec/preserveUnknownFields"]}]'
 
 resources:
-- instance
-- addons
+- tekton
+- webook-validator
+- reposistories
 - route.yaml
 - secrets.yaml
-- workload.yaml
-- repos
-- webhook.yaml
 
 transformers:
 - namespace.yaml
@@ -25,8 +23,3 @@ patches:
     - op: add
       path: /metadata/annotations/argocd.argoproj.io~1sync-options
       value: ServerSideApply=true
-
-images:
-- name: github-webhook-validator
-  newName: ghcr.io/johnvox/github-webhook-validator
-  newTag: v1.0.1

@@ -24,32 +24,6 @@ spec:
       - name: tekton-auth-jynolen-tls
         group: ''	
         kind: Secret
-# ---
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: ListenerSet
-# metadata:
-#   name: tekton-open
-#   namespace: tekton-pipelines
-# spec:
-#   parentRef:
-#     group: gateway.networking.k8s.io	
-#     kind: Gateway
-#     name: envoy-proxy-open
-#     namespace: backbone
-#   listeners:        
-#   - name: tekton-auth-https-webhook
-#     protocol: HTTPS
-#     hostname: webhook.tekton.jynolen.fr
-#     port: 443
-#     allowedRoutes:
-#       namespaces:
-#         from: All
-#     tls:
-#       mode: Terminate
-#       certificateRefs:
-#       - name: webhook-tekton-auth-jynolen-tls
-#         group: ''	
-#         kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
