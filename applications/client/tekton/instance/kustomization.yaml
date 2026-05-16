@@ -10,3 +10,8 @@ configMapGenerator:
   behavior: merge
   literals:
     - set-security-context=true
+- name: config-defaults
+  namespace: tekton-pipelines
+  behavior: merge
+  files:
+    - set-security-context=true    

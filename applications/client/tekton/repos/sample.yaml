@@ -2,6 +2,5 @@ apiVersion: pipelinesascode.tekton.dev/v1alpha1
 kind: Repository
 metadata:
   name: johnvox-test-pipeline
-  namespace: tekton-pipelines
 spec:
   url: https://github.com/johnvox/test-pipeline
