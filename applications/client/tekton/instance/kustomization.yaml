@@ -6,6 +6,7 @@ resources:
 
 configMapGenerator:
 - name: config-defaults 
+  namespace: tekton-pipelines
   behavior: merge
   files:
   - default-pod-template=configs/default-pod-template
